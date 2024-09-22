@@ -1,0 +1,4 @@
+C:/Users/kyu/Documents/Repo/Minecraft/build/CMakeFiles/minecraft.dir
+C:/Users/kyu/Documents/Repo/Minecraft/build/CMakeFiles/glad.dir
+C:/Users/kyu/Documents/Repo/Minecraft/build/CMakeFiles/edit_cache.dir
+C:/Users/kyu/Documents/Repo/Minecraft/build/CMakeFiles/rebuild_cache.dir
