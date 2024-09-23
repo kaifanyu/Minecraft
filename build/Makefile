@@ -165,6 +165,30 @@ lib/glad/src/glad.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\glad.dir\build.make CMakeFiles/glad.dir/lib/glad/src/glad.c.s
 .PHONY : lib/glad/src/glad.c.s
 
+src/gfx/shader.obj: src/gfx/shader.cpp.obj
+.PHONY : src/gfx/shader.obj
+
+# target to build an object file
+src/gfx/shader.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\minecraft.dir\build.make CMakeFiles/minecraft.dir/src/gfx/shader.cpp.obj
+.PHONY : src/gfx/shader.cpp.obj
+
+src/gfx/shader.i: src/gfx/shader.cpp.i
+.PHONY : src/gfx/shader.i
+
+# target to preprocess a source file
+src/gfx/shader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\minecraft.dir\build.make CMakeFiles/minecraft.dir/src/gfx/shader.cpp.i
+.PHONY : src/gfx/shader.cpp.i
+
+src/gfx/shader.s: src/gfx/shader.cpp.s
+.PHONY : src/gfx/shader.s
+
+# target to generate assembly for a file
+src/gfx/shader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\minecraft.dir\build.make CMakeFiles/minecraft.dir/src/gfx/shader.cpp.s
+.PHONY : src/gfx/shader.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -202,6 +226,9 @@ help:
 	@echo ... lib/glad/src/glad.obj
 	@echo ... lib/glad/src/glad.i
 	@echo ... lib/glad/src/glad.s
+	@echo ... src/gfx/shader.obj
+	@echo ... src/gfx/shader.i
+	@echo ... src/gfx/shader.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s

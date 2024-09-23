@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "C:/Users/kyu/Documents/Repo/Minecraft/src/gfx/shader.cpp" "CMakeFiles/minecraft.dir/src/gfx/shader.cpp.obj" "gcc" "CMakeFiles/minecraft.dir/src/gfx/shader.cpp.obj.d"
   "C:/Users/kyu/Documents/Repo/Minecraft/src/main.cpp" "CMakeFiles/minecraft.dir/src/main.cpp.obj" "gcc" "CMakeFiles/minecraft.dir/src/main.cpp.obj.d"
   )
 

@@ -10,5 +10,11 @@
   "command": "C:\\ProgramData\\mingw64\\mingw64\\bin\\g++.exe  @CMakeFiles/minecraft.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\minecraft.dir\\src\\main.cpp.obj -c C:\\Users\\kyu\\Documents\\Repo\\Minecraft\\src\\main.cpp",
   "file": "C:/Users/kyu/Documents/Repo/Minecraft/src/main.cpp",
   "output": "CMakeFiles/minecraft.dir/src/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/kyu/Documents/Repo/Minecraft/build",
+  "command": "C:\\ProgramData\\mingw64\\mingw64\\bin\\g++.exe  @CMakeFiles/minecraft.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\minecraft.dir\\src\\gfx\\shader.cpp.obj -c C:\\Users\\kyu\\Documents\\Repo\\Minecraft\\src\\gfx\\shader.cpp",
+  "file": "C:/Users/kyu/Documents/Repo/Minecraft/src/gfx/shader.cpp",
+  "output": "CMakeFiles/minecraft.dir/src/gfx/shader.cpp.obj"
 }
 ]

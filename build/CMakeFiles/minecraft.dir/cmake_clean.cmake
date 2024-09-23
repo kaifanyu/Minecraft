@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/minecraft.dir/src/gfx/shader.cpp.obj"
+  "CMakeFiles/minecraft.dir/src/gfx/shader.cpp.obj.d"
   "CMakeFiles/minecraft.dir/src/main.cpp.obj"
   "CMakeFiles/minecraft.dir/src/main.cpp.obj.d"
   "libminecraft.dll.a"

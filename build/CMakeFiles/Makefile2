@@ -82,12 +82,12 @@ clean: CMakeFiles/glad.dir/clean
 CMakeFiles/minecraft.dir/all: CMakeFiles/glad.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\minecraft.dir\build.make CMakeFiles/minecraft.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\minecraft.dir\build.make CMakeFiles/minecraft.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\kyu\Documents\Repo\Minecraft\build\CMakeFiles --progress-num=3,4 "Built target minecraft"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\kyu\Documents\Repo\Minecraft\build\CMakeFiles --progress-num=3,4,5 "Built target minecraft"
 .PHONY : CMakeFiles/minecraft.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/minecraft.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\kyu\Documents\Repo\Minecraft\build\CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\kyu\Documents\Repo\Minecraft\build\CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/minecraft.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\kyu\Documents\Repo\Minecraft\build\CMakeFiles 0
 .PHONY : CMakeFiles/minecraft.dir/rule
