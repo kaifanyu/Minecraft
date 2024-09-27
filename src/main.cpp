@@ -1,6 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 #include "gfx/shader.hpp"
+#include "uti/camera.hpp"
+
 #include <iostream>
 #include <cglm/cglm.h>
 
@@ -9,6 +12,10 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+
+
 
 // screen setting
 const int SCR_WIDTH = 800;
@@ -19,6 +26,19 @@ vec3 cameraPos = {0.0f, 0.0f, 3.0f};
 vec3 cameraFront = {0.0f, 0.0f, -1.0f};
 vec3 cameraUp = {0.0f, 1.0f, 0.0f};
 
+
+//mouse 
+bool firstMouse = true;
+float yaw = -90.0f;     //left / right direction. Starting at -90 to face straight?
+float pitch = 0.0f;     //up / down
+float lastX = 8000.0f / 2.0;
+float lastY = 600.0f / 2.0;
+float fov = 45.0f;
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
+Camera camera(vec3{0.0f, 0.0f, -0.3f}); //create camera
 
 using namespace std;
 int main() {
@@ -52,7 +72,15 @@ int main() {
     
     // whenever the window changes in size, gflw calls this function and fills in proper arguments
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    
+
+    // mouse cursor movement
+    glfwSetCursorPosCallback(window, mouse_callback);
+    // mouse scroll movement
+    glfwSetScrollCallback(window, scroll_callback);
+    // capture mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+
     // configure global opengl state
     glEnable(GL_DEPTH_TEST);
     
@@ -166,13 +194,13 @@ int main() {
     myShader.use();
     myShader.setInt("texture1", 0);
 
-    //Set up M_projection
-    mat4 M_projection;    
-    glm_perspective(glm_rad(45.0f), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);
-    myShader.setMat4("M_projection", M_projection);
 
     // Render loop
     while (!glfwWindowShouldClose(window)) {
+        //get current Time
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;   
+        lastFrame = currentFrame;
 
         // checks input
         processInput(window);
@@ -198,6 +226,10 @@ int main() {
         glm_lookat(cameraPos, cameraTarget, cameraUp, M_view);
         myShader.setMat4("M_view", M_view);
 
+        //Set up M_projection
+        mat4 M_projection;    
+        glm_perspective(glm_rad(fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);
+        myShader.setMat4("M_projection", M_projection);
 
         printf("T Direction: (%f, %f, %f)\n", cameraTarget[0], cameraTarget[1], cameraTarget[2]);
         printf("P Direction: (%f, %f, %f)\n", cameraPos[0], cameraPos[1], cameraPos[2]);
@@ -248,7 +280,7 @@ void processInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
     }
 
-    float cameraSpeed = 0.05f;
+    float cameraSpeed = static_cast<float>(2.5f * deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
@@ -278,4 +310,55 @@ void processInput(GLFWwindow* window)
         glm_vec3_scale(temp, cameraSpeed, temp); //scale temp by cameraSpeed basically 'incrementing' temp 
         glm_vec3_add(cameraPos, temp, cameraPos); //add 'right' direction to
     }
+}
+
+
+void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
+{
+    float xpos = static_cast<float>(xposIn);    //convert double to float
+    float ypos = static_cast<float>(yposIn);
+
+    if(firstMouse)  //init mouse
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;   //y go from bottom to top
+    
+    float sens = 0.05f;
+    xoffset *= sens;
+    yoffset *= sens;
+    
+    lastX = xpos;
+    lastY = ypos;
+
+    yaw += xoffset; //change x axis
+    pitch += yoffset; //change y axis
+
+    //if pitch is out of bounds, don't flip screen
+    if(pitch > 89.0f)
+        pitch = 89.0f;
+    if(pitch < -89.0f)
+        pitch = -89.0f;
+    
+    vec3 front;
+    front[0] = cos(glm_rad(yaw)) * cos(glm_rad(pitch)); //x
+    front[1] = sin(glm_rad(pitch));
+    front[2] = sin(glm_rad(yaw)) * cos(glm_rad(pitch));
+
+    glm_normalize(front);
+    glm_vec3_copy(front, cameraFront);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    fov -= (float)yoffset;
+    if (fov < 1.0f)
+        fov = 1.0f;
+    if (fov > 45.0f)
+        fov = 45.0f;
 }

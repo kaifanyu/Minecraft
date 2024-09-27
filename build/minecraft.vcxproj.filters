@@ -7,6 +7,9 @@
     <ClCompile Include="C:\Users\Kai\Documents\Repo\Minecraft\src\gfx\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Kai\Documents\Repo\Minecraft\src\uti\camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\Kai\Documents\Repo\Minecraft\CMakeLists.txt" />

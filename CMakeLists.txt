@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add executable (without WIN32 to indicate console app)
-add_executable(minecraft src/main.cpp src/gfx/shader.cpp)
+add_executable(minecraft src/main.cpp src/gfx/shader.cpp src/uti/camera.cpp)
 
 # Include GLAD headers
 include_directories(${CMAKE_SOURCE_DIR}/lib/glad/include)
