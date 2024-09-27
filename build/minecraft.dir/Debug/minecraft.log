@@ -1,0 +1,16 @@
+﻿main.obj : error LNK2019: unresolved external symbol glfwInit referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwWindowHint referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSetWindowShouldClose referenced in function "void __cdecl processInput(struct GLFWwindow *)" (?processInput@@YAXPEAUGLFWwindow@@@Z)
+main.obj : error LNK2019: unresolved external symbol glfwSetFramebufferSizeCallback referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwGetKey referenced in function "void __cdecl processInput(struct GLFWwindow *)" (?processInput@@YAXPEAUGLFWwindow@@@Z)
+main.obj : error LNK2019: unresolved external symbol glfwGetTime referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwGetProcAddress referenced in function main
+MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+C:\Users\Kai\Documents\Repo\Minecraft\lib\glfw\lib\libglfw3.a : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Kai\Documents\Repo\Minecraft\build\Debug\minecraft.exe : fatal error LNK1120: 14 unresolved externals

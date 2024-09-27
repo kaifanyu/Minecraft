@@ -5,9 +5,8 @@ project(minecraft)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Add executable (with WIN32 to prevent console window on Windows)
-# add_executable(minecraft src/main.cpp src/gfx/shader.cpp)
-add_executable(minecraft WIN32 src/main.cpp src/gfx/shader.cpp)
+# Add executable (without WIN32 to indicate console app)
+add_executable(minecraft src/main.cpp src/gfx/shader.cpp)
 
 # Include GLAD headers
 include_directories(${CMAKE_SOURCE_DIR}/lib/glad/include)
@@ -15,11 +14,17 @@ include_directories(${CMAKE_SOURCE_DIR}/lib/glad/include)
 # Include GLFW headers
 include_directories(${CMAKE_SOURCE_DIR}/lib/glfw/include)
 
+# Include CGLM headers
+include_directories(${CMAKE_SOURCE_DIR}/lib/cglm/include)
+
+# Include stb.h
+include_directories(${CMAKE_SOURCE_DIR}/lib/stb)
+
 # Link GLAD source file (compile directly)
 add_library(glad STATIC lib/glad/src/glad.c)
 
-# Specify the exact path for GLFW static library
-set(GLFW_LIB ${CMAKE_SOURCE_DIR}/lib/glfw/lib/libglfw3.a)
+# Specify the exact path for GLFW static library (ensure it's 64-bit if you're building 64-bit)
+set(GLFW_LIB ${CMAKE_SOURCE_DIR}/lib/glfw/lib/glfw3.lib)  # For 64-bit Visual Studio build
 
 # Add OpenGL (for cross-platform OpenGL support)
 find_package(OpenGL REQUIRED)
