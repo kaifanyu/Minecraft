@@ -1,6 +1,0 @@
-# ninja log v5
-4	448	7486693706842583	CMakeFiles/minecraft.dir/src/main.cpp.obj	24686beb1a0c13dd
-8	1080	7486693713155827	CMakeFiles/glad.dir/lib/glad/src/glad.c.obj	bb02612602a481c9
-1082	1164	7486693713988454	libglad.a	41b551dcf7945eb1
-1164	1329	7486693715555293	minecraft.exe	23742eefff5249ca
-10	384	7486711087623773	minecraft.exe	5f1096c9a273c9d7
