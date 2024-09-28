@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add executable (without WIN32 to indicate console app)
-add_executable(minecraft src/main.cpp src/gfx/shader.cpp src/uti/camera.cpp)
+file(GLOB_RECURSE SRC_FILES src/*.cpp)
+add_executable(minecraft ${SRC_FILES})
 
 # Include GLAD headers
 include_directories(${CMAKE_SOURCE_DIR}/lib/glad/include)
@@ -39,3 +40,6 @@ endif()
 
 # Copy shader files to the build directory
 file(COPY ${CMAKE_SOURCE_DIR}/assets/shaders DESTINATION ${CMAKE_BINARY_DIR}/assets)
+file(COPY ${CMAKE_SOURCE_DIR}/assets/images DESTINATION ${CMAKE_BINARY_DIR}/assets)
+
+add_definitions(-DASSETS_DIR=\"${CMAKE_BINARY_DIR}/assets/\")

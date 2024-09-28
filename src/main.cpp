@@ -16,15 +16,12 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
 
-
 // screen setting
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;
         
 //camera
 vec3 cameraPos = {0.0f, 0.0f, 3.0f};
-vec3 cameraFront = {0.0f, 0.0f, -1.0f};
-vec3 cameraUp = {0.0f, 1.0f, 0.0f};
 
 
 //mouse 
@@ -43,7 +40,6 @@ Camera camera(cameraPos); //create camera with default cameraPos
 
 using namespace std;
 int main() {
-
 
     // Initialize GLFW
     if (!glfwInit()) {
@@ -87,7 +83,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     
     // build + compile shader
-    Shader myShader("../assets/shaders/testShader.vs", "../assets/shaders/testShader.fs");
+    Shader myShader( ASSETS_DIR "shaders/testShader.vs", ASSETS_DIR "shaders/testShader.fs");
 
 
     float vertices[] = {
@@ -218,24 +214,15 @@ int main() {
         // activate shader
         myShader.use(); //use shader
 
-
         //Set up M_View
         mat4 M_view;    
-        glm_mat4_identity(M_view);
-
-        vec3 cameraTarget;
-        glm_vec3_add(cameraPos, cameraFront, cameraTarget);
-        glm_lookat(cameraPos, cameraTarget, cameraUp, M_view);
+        camera.get_view_matrix(M_view);
         myShader.setMat4("M_view", M_view);
 
         //Set up M_projection
         mat4 M_projection;    
         glm_perspective(glm_rad(fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);
         myShader.setMat4("M_projection", M_projection);
-
-        // printf("T Direction: (%f, %f, %f)\n", cameraTarget[0], cameraTarget[1], cameraTarget[2]);
-        // printf("P Direction: (%f, %f, %f)\n", cameraPos[0], cameraPos[1], cameraPos[2]);
-        // printf("U Direction: (%f, %f, %f)\n", cameraUp[0], cameraUp[1], cameraUp[2]);
 
         //render boxes
         glBindVertexArray(VAO);
@@ -278,45 +265,21 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
         glfwSetWindowShouldClose(window, true);
-    }
-
-    float cameraSpeed = static_cast<float>(2.5f * deltaTime);
-
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        vec3 temp;
-        glm_vec3_scale(cameraFront, cameraSpeed, temp);
-        glm_vec3_add(cameraPos, temp, cameraPos);
-    }
+        camera.process_keyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        vec3 temp;
-        glm_vec3_scale(cameraFront, cameraSpeed, temp);
-        glm_vec3_sub(cameraPos, temp, cameraPos);
-    }
+        camera.process_keyboard(BACKWARD, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        vec3 temp;
-        glm_cross(cameraFront, cameraUp, temp);
-        glm_normalize(temp);
-        glm_vec3_scale(temp, cameraSpeed, temp);
-        glm_vec3_sub(cameraPos, temp, cameraPos);
-    }
+        camera.process_keyboard(LEFT, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        vec3 temp;
-        glm_cross(cameraFront, cameraUp, temp);  //get the 'right' direction by crossing front and up
-        glm_normalize(temp); //normalize temp
-        glm_vec3_scale(temp, cameraSpeed, temp); //scale temp by cameraSpeed basically 'incrementing' temp 
-        glm_vec3_add(cameraPos, temp, cameraPos); //add 'right' direction to
-    }
+        camera.process_keyboard(RIGHT, deltaTime);
 }
 
 
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
 {
+    
     float xpos = static_cast<float>(xposIn);    //convert double to float
     float ypos = static_cast<float>(yposIn);
 
@@ -353,7 +316,7 @@ void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
     front[2] = sin(glm_rad(yaw)) * cos(glm_rad(pitch));
 
     glm_normalize(front);
-    glm_vec3_copy(front, cameraFront);
+    glm_vec3_copy(front, camera.cameraFront);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
