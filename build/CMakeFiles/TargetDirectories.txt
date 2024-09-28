@@ -1,4 +1,0 @@
-C:/Users/Kai/Documents/Repo/Minecraft/build/CMakeFiles/minecraft.dir
-C:/Users/Kai/Documents/Repo/Minecraft/build/CMakeFiles/glad.dir
-C:/Users/Kai/Documents/Repo/Minecraft/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/Kai/Documents/Repo/Minecraft/build/CMakeFiles/ZERO_CHECK.dir

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
 
@@ -12,8 +13,9 @@ class Camera{
         vec3 cameraPos;
         vec3 cameraFront = {0.0f, 0.0f, -1.0f};
         vec3 cameraUp = {0.0f, 1.0f, 0.0f};
+        vec3 cameraTarget;
 
-
+        
         //mouse default settings
         bool firstMouse = true;
         float yaw = -90.0f;     //left / right direction. Starting at -90 to face straight?
@@ -27,6 +29,7 @@ class Camera{
 
 
         Camera(vec3 cameraPosIn); //constructor for cameraPos;
-        // void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
+        void get_view_matrix(mat4 &M_view);
+        void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
         // void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 };

@@ -38,10 +38,12 @@ float fov = 45.0f;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-Camera camera(vec3{0.0f, 0.0f, -0.3f}); //create camera
+Camera camera(cameraPos); //create camera with default cameraPos
+
 
 using namespace std;
 int main() {
+
 
     // Initialize GLFW
     if (!glfwInit()) {
@@ -231,9 +233,9 @@ int main() {
         glm_perspective(glm_rad(fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);
         myShader.setMat4("M_projection", M_projection);
 
-        printf("T Direction: (%f, %f, %f)\n", cameraTarget[0], cameraTarget[1], cameraTarget[2]);
-        printf("P Direction: (%f, %f, %f)\n", cameraPos[0], cameraPos[1], cameraPos[2]);
-        printf("U Direction: (%f, %f, %f)\n", cameraUp[0], cameraUp[1], cameraUp[2]);
+        // printf("T Direction: (%f, %f, %f)\n", cameraTarget[0], cameraTarget[1], cameraTarget[2]);
+        // printf("P Direction: (%f, %f, %f)\n", cameraPos[0], cameraPos[1], cameraPos[2]);
+        // printf("U Direction: (%f, %f, %f)\n", cameraUp[0], cameraUp[1], cameraUp[2]);
 
         //render boxes
         glBindVertexArray(VAO);
