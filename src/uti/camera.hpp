@@ -18,9 +18,6 @@ const float Default_Fov = 45.0f;
 const float Default_Senstivity = 0.5f;
 const float Default_movementSpeedScalar = 2.5;
 
-// vec3 Default_CameraFront = {0.0f, 0.0f, -1.0f};
-// vec3 Default_CameraUp = {0.0f, 1.0f, 0.0f};
-
 class Camera{
     public:
 
@@ -28,8 +25,6 @@ class Camera{
         vec3 cameraPos;
         vec3 cameraFront;
         vec3 cameraUp;
-
-        vec3 cameraTarget;
 
         //mouse default settings
         bool firstMouse;
@@ -48,7 +43,7 @@ class Camera{
 
         Camera(vec3 cameraPosIn); //constructor for cameraPos;
         void process_keyboard(Camera_Movement direction, float deltaTime);
+        void process_mouse_camera(const float xoffset, const float yoffset);
+        void process_scroll_camera(const float xoffset, const float yoffset);
         void get_view_matrix(mat4 &M_view);
-        void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
-        // void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 };

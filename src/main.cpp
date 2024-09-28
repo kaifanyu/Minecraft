@@ -28,9 +28,9 @@ vec3 cameraPos = {0.0f, 0.0f, 3.0f};
 bool firstMouse = true;
 float yaw = -90.0f;     //left / right direction. Starting at -90 to face straight?
 float pitch = 0.0f;     //up / down
+float fov = 45.0f;
 float lastX = 8000.0f / 2.0;
 float lastY = 600.0f / 2.0;
-float fov = 45.0f;
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -86,7 +86,7 @@ int main() {
     Shader myShader( ASSETS_DIR "shaders/testShader.vs", ASSETS_DIR "shaders/testShader.fs");
 
 
-    float vertices[] = {
+    float vertices[180] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -177,7 +177,7 @@ int main() {
 
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-    unsigned char* data = stbi_load("../assets/images/cat.jpg", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load(ASSETS_DIR "images/cat.jpg", &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -204,7 +204,7 @@ int main() {
         processInput(window);
         
         // render 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         // bind textures 
@@ -276,10 +276,8 @@ void processInput(GLFWwindow* window)
         camera.process_keyboard(RIGHT, deltaTime);
 }
 
-
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
 {
-    
     float xpos = static_cast<float>(xposIn);    //convert double to float
     float ypos = static_cast<float>(yposIn);
 
@@ -289,7 +287,6 @@ void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
         lastY = ypos;
         firstMouse = false;
     }
-
 
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos;   //y go from bottom to top
@@ -301,29 +298,10 @@ void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
     lastX = xpos;
     lastY = ypos;
 
-    yaw += xoffset; //change x axis
-    pitch += yoffset; //change y axis
-
-    //if pitch is out of bounds, don't flip screen
-    if(pitch > 89.0f)
-        pitch = 89.0f;
-    if(pitch < -89.0f)
-        pitch = -89.0f;
-    
-    vec3 front;
-    front[0] = cos(glm_rad(yaw)) * cos(glm_rad(pitch)); //x
-    front[1] = sin(glm_rad(pitch));
-    front[2] = sin(glm_rad(yaw)) * cos(glm_rad(pitch));
-
-    glm_normalize(front);
-    glm_vec3_copy(front, camera.cameraFront);
+    camera.process_mouse_camera(xoffset, yoffset);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    fov -= (float)yoffset;
-    if (fov < 1.0f)
-        fov = 1.0f;
-    if (fov > 45.0f)
-        fov = 45.0f;
+    camera.process_scroll_camera(static_cast<float>(xoffset), static_cast<float>(yoffset));
 }

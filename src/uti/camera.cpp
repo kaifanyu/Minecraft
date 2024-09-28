@@ -19,8 +19,9 @@ Camera::Camera(vec3 camearPosIn)
 
 void Camera::get_view_matrix(mat4 &M_view)
 {   
-    glm_vec3_add(cameraPos, cameraFront, cameraTarget); //cameraPos + cameraFront
-    glm_lookat(cameraPos, cameraTarget, cameraUp, M_view);  //modify M_view
+    vec3 temp;
+    glm_vec3_add(cameraPos, cameraFront, temp); //cameraPos + cameraFront
+    glm_lookat(cameraPos, temp, cameraUp, M_view);  //modify M_view
 }
 
 void Camera::process_keyboard(Camera_Movement direction, float deltaTime)
@@ -54,39 +55,17 @@ void Camera::process_keyboard(Camera_Movement direction, float deltaTime)
     }
 }
 
-void Camera::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+void Camera::process_mouse_camera(const float xoffset, const float yoffset)
 {
-
-    float xpos = static_cast<float>(xposIn);    //convert double to float
-    float ypos = static_cast<float>(yposIn);
-
-    if(firstMouse)  //init mouse
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;   //y go from bottom to top
     
-    float sens = 0.05f;
-    xoffset *= sens;
-    yoffset *= sens;
-    
-    lastX = xpos;
-    lastY = ypos;
-
-    yaw += xoffset; //change x axis
-    pitch += yoffset; //change y axis
-
     //if pitch is out of bounds, don't flip screen
     if(pitch > 89.0f)
         pitch = 89.0f;
     if(pitch < -89.0f)
         pitch = -89.0f;
     
+    yaw += xoffset; //change x axis
+    pitch += yoffset; //change y axis
     vec3 front;
     front[0] = cos(glm_rad(yaw)) * cos(glm_rad(pitch)); //x
     front[1] = sin(glm_rad(pitch));
@@ -94,4 +73,13 @@ void Camera::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
     glm_normalize(front);
     glm_vec3_copy(front, cameraFront);
+}
+
+void Camera::process_scroll_camera(const float xoffset, const float yoffset)
+{
+    fov -= (float)yoffset;
+    if (fov < 1.0f)
+        fov = 1.0f;
+    if (fov > 45.0f)
+        fov = 45.0f;
 }
