@@ -1,0 +1,117 @@
+#include "window.hpp"
+#include "../uti/camera.hpp"
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <cglm/cglm.h>
+
+Window::Window(const int &SCR_WIDTH_IN, const int &SCR_HEIGHT_IN)
+{
+    SCR_WIDTH = SCR_WIDTH_IN;
+    SCR_HEIGHT = SCR_HEIGHT_IN;
+    window = nullptr;
+    name = "Walmart Minecraft";
+
+    bool firstMouse = true;
+    float yaw = -90.0f;     //left / right direction. Starting at -90 to face straight?
+    float pitch = 0.0f;     //up / down
+    float fov = 45.0f;
+    float lastX = 8000.0f / 2.0;
+    float lastY = 600.0f / 2.0;
+
+}
+
+
+
+
+bool Window::init()
+{
+    // Initialize GLFW
+    if (!glfwInit()) {
+        printf("Failed to initialize GLFW\n");
+        return false;
+    }
+    // Request OpenGL 4.2 with the Core profile
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, name, NULL, NULL);
+
+    if (!window) {
+        printf("Failed to create GLFW window\n");
+        glfwTerminate();
+        return false;
+    }
+
+    // Make the window's context current
+    glfwMakeContextCurrent(window);
+
+    // Load OpenGL functions with GLAD
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        printf("Failed to initialize GLAD\n");
+        return false;
+    }
+
+}
+
+void Window::setCallbacks()
+{
+    // whenever the window changes in size, gflw calls this function and fills in proper arguments
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    // mouse cursor movement
+    glfwSetCursorPosCallback(window, mouse_callback);
+    // mouse scroll movement
+    glfwSetScrollCallback(window, scroll_callback);
+    // capture mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void Window::processInput(Camera camera, const int &deltaTime)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.process_keyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.process_keyboard(BACKWARD, deltaTime);
+    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.process_keyboard(LEFT, deltaTime);
+    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.process_keyboard(RIGHT, deltaTime);
+}
+
+void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);    
+}
+
+void Window::mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
+{
+    float xpos = static_cast<float>(xposIn);    //convert double to float
+    float ypos = static_cast<float>(yposIn);
+
+    if(firstMouse)  //init mouse
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;   //y go from bottom to top
+    
+    float sens = 0.05f;
+    xoffset *= sens;
+    yoffset *= sens;
+    
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.process_mouse_camera(xoffset, yoffset);
+}
+
+void Window::scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+{
+}

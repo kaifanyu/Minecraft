@@ -1,14 +1,17 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <cglm/cglm.h>
+
 
 #include "gfx/shader.hpp"
+#include "gfx/render.hpp"
+#include "gfx/texture.hpp"
+#include "gfx/window.hpp"
+
 #include "uti/camera.hpp"
 
 #include <iostream>
-#include <cglm/cglm.h>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <vector>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -19,10 +22,11 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 // screen setting
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;
-        
+
 //camera
 vec3 cameraPos = {0.0f, 0.0f, 3.0f};
 
+Camera camera(cameraPos); //create camera with default cameraPos
 
 //mouse 
 bool firstMouse = true;
@@ -35,71 +39,81 @@ float lastY = 600.0f / 2.0;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-Camera camera(cameraPos); //create camera with default cameraPos
-
 
 using namespace std;
 int main() {
 
-    // Initialize GLFW
-    if (!glfwInit()) {
-        return -1;
-    }
-    // Request OpenGL 4.2 with the Core profile
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    // Create a windowed mode window and its OpenGL context
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Walmart Minecraft", NULL, NULL);
+    Window window(SCR_WIDTH, SCR_HEIGHT);
+    if (!window.init())
+    {
+        printf("Failed to initialize window");
+        return -1;
+    };
+
+    window.setCallbacks();
+    // // Initialize GLFW
+    // if (!glfwInit()) {
+    //     return -1;
+    // }
+    // // Request OpenGL 4.2 with the Core profile
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // // Create a windowed mode window and its OpenGL context
+    // GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Walmart Minecraft", NULL, NULL);
     
-    if (!window) {
-        printf("Failed to create GLFW window\n");
-        glfwTerminate();
-        return -1;
-    }
+    // if (!window) {
+    //     printf("Failed to create GLFW window\n");
+    //     glfwTerminate();
+    //     return -1;
+    // }
 
-    // Make the window's context current
-    glfwMakeContextCurrent(window);
+    // // Make the window's context current
+    // glfwMakeContextCurrent(window);
 
-    // Load OpenGL functions with GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        printf("Failed to initialize GLAD\n");
-        return -1;
-    }
+    // // Load OpenGL functions with GLAD
+    // if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    //     printf("Failed to initialize GLAD\n");
+    //     return -1;
+    // }
     
-    // whenever the window changes in size, gflw calls this function and fills in proper arguments
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    // // whenever the window changes in size, gflw calls this function and fills in proper arguments
+    // glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // mouse cursor movement
-    glfwSetCursorPosCallback(window, mouse_callback);
-    // mouse scroll movement
-    glfwSetScrollCallback(window, scroll_callback);
-    // capture mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // // mouse cursor movement
+    // glfwSetCursorPosCallback(window, mouse_callback);
+    // // mouse scroll movement
+    // glfwSetScrollCallback(window, scroll_callback);
+    // // capture mouse
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 
     // configure global opengl state
     glEnable(GL_DEPTH_TEST);
     
-    // build + compile shader
-    Shader myShader( ASSETS_DIR "shaders/testShader.vs", ASSETS_DIR "shaders/testShader.fs");
 
+    std::vector<GLfloat> triangle = {
+        //back square    
+            // back triangle
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            //other back traingle
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-    float vertices[180] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        //front square
+            //front triangle
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            // other front triangle
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
         -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
         -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -144,72 +158,35 @@ int main() {
         {-1.3f,  1.0f, -1.5}
     };
 
+    // Create Shader
+    Shader myShader(ASSETS_DIR "shaders/testShader.vs", ASSETS_DIR "shaders/testShader.fs");
 
+    // Create Render
+    Render render(triangle);
 
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);  // Generate the VAO
-    glGenBuffers(1, &VBO);       // Generate the VBO
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-
-    //Texture
-    unsigned int texture1;
-    glGenTextures(1, &texture1);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-
-    // Set texture wrapping and filtering options
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-    unsigned char* data = stbi_load(ASSETS_DIR "images/cat.jpg", &width, &height, &nrChannels, 0);
-    if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-
-
-
+    // Create Texture
+    Texture texture(ASSETS_DIR "images/shiina.jpg");    //this will hold an vector array of Textures
+    
     // Set the texture uniform
     myShader.use();
+    texture.bind(0);
     myShader.setInt("texture1", 0);
 
 
     // Render loop
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window.window)) {
         //get current Time
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;   
         lastFrame = currentFrame;
 
         // checks input
-        processInput(window);
+        window.processInput(camera, deltaTime);
         
         // render 
-        glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
+        glClearColor(1.0f, 1.0f, 1.0f, 0.5f);   //background color?
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        // bind textures 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+
 
         // activate shader
         myShader.use(); //use shader
@@ -221,14 +198,14 @@ int main() {
 
         //Set up M_projection
         mat4 M_projection;    
-        glm_perspective(glm_rad(fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);
+        glm_perspective(glm_rad(camera.fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);
         myShader.setMat4("M_projection", M_projection);
-
-        //render boxes
-        glBindVertexArray(VAO);
 
         for(int i = 1; i < 10; i++)
         {
+
+            texture.bind(0);   // Bind texture1 (shiina.jpg) to texture unit 0 for other cubes
+
             //Set up M_Model
             mat4 M_model;
             glm_mat4_identity(M_model);   //basically 1.0f
@@ -240,68 +217,65 @@ int main() {
 
             myShader.setMat4("M_model", M_model);
 
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            render.draw();
         }
 
         // Swap buffers
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(window.window);
         // Poll for and process events
         glfwPollEvents();
     }
-
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
 
     glfwTerminate();
     return 0;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    //tells OpenGL how to map to NDC space to the corresponding width + height
-    glViewport(0, 0, width, height);    
-}
+// void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+// {
+//     //tells OpenGL how to map to NDC space to the corresponding width + height
+//     glViewport(0, 0, width, height);    
+// }
 
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.process_keyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.process_keyboard(BACKWARD, deltaTime);
-    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.process_keyboard(LEFT, deltaTime);
-    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.process_keyboard(RIGHT, deltaTime);
-}
+// void processInput(GLFWwindow* window)
+// {
+//     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+//         glfwSetWindowShouldClose(window, true);
+//     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+//         camera.process_keyboard(FORWARD, deltaTime);
+//     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+//         camera.process_keyboard(BACKWARD, deltaTime);
+//     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+//         camera.process_keyboard(LEFT, deltaTime);
+//     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+//         camera.process_keyboard(RIGHT, deltaTime);
+// }
 
-void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
-{
-    float xpos = static_cast<float>(xposIn);    //convert double to float
-    float ypos = static_cast<float>(yposIn);
+// void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
+// {
+//     float xpos = static_cast<float>(xposIn);    //convert double to float
+//     float ypos = static_cast<float>(yposIn);
 
-    if(firstMouse)  //init mouse
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
+//     if(firstMouse)  //init mouse
+//     {
+//         lastX = xpos;
+//         lastY = ypos;
+//         firstMouse = false;
+//     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;   //y go from bottom to top
+//     float xoffset = xpos - lastX;
+//     float yoffset = lastY - ypos;   //y go from bottom to top
     
-    float sens = 0.05f;
-    xoffset *= sens;
-    yoffset *= sens;
+//     float sens = 0.05f;
+//     xoffset *= sens;
+//     yoffset *= sens;
     
-    lastX = xpos;
-    lastY = ypos;
+//     lastX = xpos;
+//     lastY = ypos;
 
-    camera.process_mouse_camera(xoffset, yoffset);
-}
+//     camera.process_mouse_camera(xoffset, yoffset);
+// }
 
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-    camera.process_scroll_camera(static_cast<float>(xoffset), static_cast<float>(yoffset));
-}
+// void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+// {
+//     camera.process_scroll_camera(static_cast<float>(xoffset), static_cast<float>(yoffset));
+// }
