@@ -13,58 +13,81 @@
 #include <vector>
 
 // screen setting
-const int SCR_WIDTH = 800;
-const int SCR_HEIGHT = 600;
+const float SCR_WIDTH = 800.0f;
+const float SCR_HEIGHT = 600.0f;
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 void updateDeltaTime();
 int main() {
+    vec3 lightPos = {1.2f, 1.0f, 2.0f}; //temp
 
-    //camera
+    // camera
     vec3 cameraPos = {0.0f, 0.0f, 3.0f};
     Camera camera(cameraPos); //create camera with default cameraPos
 
+    // Window
     Window window(SCR_WIDTH, SCR_HEIGHT, &camera);
-    if (!window.init()) {
+    if (!window.init())
         return -1;  // If window initialization failed, exit
-    }
     window.setCallbacks();
 
     // configure global opengl state
     glEnable(GL_DEPTH_TEST);
     
+  
+    vector<float> vertices = {
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f,  
+         0.5f,  0.5f, -0.5f,  
+         0.5f,  0.5f, -0.5f,  
+        -0.5f,  0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
 
-    vec3 cubePositions[] = {
-        {0.0f, 0.0f, 0.0f},    
-        { 0.0f,  0.0f,  0.0f},
-        { 2.0f,  5.0f, -15.0f},
-        {-1.5f, -2.2f, -2.5f},
-        {-3.8f, -2.0f, -12.3f},
-        {2.4f, -0.4f, -3.5f},
-        {-1.7f,  3.0f, -7.5f},
-        { 1.3f, -2.0f, -2.5f},
-        { 1.5f,  2.0f, -2.5f},
-        { 1.5f,  0.2f, -1.5f},
-        {-1.3f,  1.0f, -1.5}
+        -0.5f, -0.5f,  0.5f, 
+         0.5f, -0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f, -0.5f,  0.5f, 
+
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f, 
+
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f, -0.5f,  
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f,  0.5f,  
+         0.5f, -0.5f,  0.5f,  
+        -0.5f, -0.5f,  0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+
+        -0.5f,  0.5f, -0.5f, 
+         0.5f,  0.5f, -0.5f,  
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f, -0.5f, 
     };
-
+  
     // Create Shader
-    Shader myShader(ASSETS_DIR "shaders/testShader.vs", ASSETS_DIR "shaders/testShader.fs");
+    Shader colorShader(ASSETS_DIR "shaders/color.vs", ASSETS_DIR "shaders/color.fs");
+    Shader cubeShader(ASSETS_DIR "shaders/lightShader.vs", ASSETS_DIR "shaders/lightShader.fs");
 
     // Create Render
-    Render render;
-
-    // Create Texture
-    Texture texture(ASSETS_DIR "images/cat.jpg");    //this will hold an vector array of Textures
-    
-    // Set the texture uniform
-    myShader.use();
-
-    texture.bind();
-    myShader.setInt("texture1", 0);
-
+    Render render(vertices);
+    Render cube(vertices);
     // Render loop
     while (!glfwWindowShouldClose(window.window)) {
         //get current Time
@@ -73,45 +96,45 @@ int main() {
         // checks input
         window.processInput(&camera, deltaTime);
         
-        // render 
-        glClearColor(1.0f, 1.0f, 1.0f, 0.5f);   //background color?
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // background color
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // activate shader
-        myShader.use(); //use shader
+        // render 
+        colorShader.use();
+        colorShader.setVec3("objectColor", {1.0f, 0.5f, 0.31f});
+        colorShader.setVec3("lightColor", { 1.0f, 1.0f, 1.0f});
 
-        //Set up M_View
-        mat4 M_view;    
-        camera.get_view_matrix(M_view);
-        myShader.setMat4("M_view", M_view);
 
-        //Set up M_projection
-        mat4 M_projection;    
-        glm_perspective(glm_rad(camera.fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);
-        myShader.setMat4("M_projection", M_projection);
+        //Set up for colorShader
+        mat4 M_view, M_projection;    
+        camera.get_view_matrix(M_view); //M_View
+        glm_perspective(glm_rad(camera.fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);    //M_projection
 
-        for(int i = 1; i < 10; i++)
-        {
-            texture.bind();   // Bind texture1 (shiina.jpg) to texture unit 0 for other cubes
+        //Set up M_Model
+        mat4 M_model;
+        glm_mat4_identity(M_model);
+        colorShader.setMat4("model", M_model);
+        colorShader.setMat4("view", M_view);
+        colorShader.setMat4("projection", M_projection);
 
-            //Set up M_Model
-            mat4 M_model;
-            glm_mat4_identity(M_model);   //basically 1.0f
-            glm_translate(M_model, cubePositions[i]);
+        render.draw(); //draw render
 
-            // float angle = (float)glfwGetTime(); // get the time for animated rotation
-            float angle = 20.0f * i;
-            glm_rotate(M_model, glm_rad(angle) * (float)glfwGetTime(), vec3{1.0f, 0.0f, 0.0f}); // rotating around the x axis
 
-            myShader.setMat4("M_model", M_model);
+        cubeShader.use();
+        mat4 cube_model;
 
-            render.draw();
-        }
+        glm_mat4_identity(cube_model);
+        glm_translate(cube_model, lightPos);
+        glm_scale_uni(cube_model, 0.2f);
+        cubeShader.setMat4("model", cube_model);
+        cubeShader.setMat4("view", M_view);
+        cubeShader.setMat4("projection", M_projection);
 
-        // Swap buffers
-        glfwSwapBuffers(window.window);
-        // Poll for and process events
-        glfwPollEvents();
+        cube.draw();
+
+
+        glfwSwapBuffers(window.window); // Swap buffers
+        glfwPollEvents();// Poll for and process events
     }
 
     glfwTerminate();

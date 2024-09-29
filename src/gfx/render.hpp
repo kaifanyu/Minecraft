@@ -13,7 +13,7 @@ class Render{
         std::vector<GLfloat> object;    //object with vertices / positions
         int object_count;   //how many seperate objects we create -> how many VAO / VBO to bind?
 
-        Render();   //empty constructor. Create triangle on default
+        // Render();   //empty constructor. Create triangle on default
         Render(const std::vector<GLfloat>& object); //constructor
         ~Render();  //destructor
         void draw();

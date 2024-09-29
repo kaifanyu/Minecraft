@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
-Window::Window(const int &SCR_WIDTH_IN, const int &SCR_HEIGHT_IN, Camera* camera_in)
+Window::Window(const float &SCR_WIDTH_IN, const float &SCR_HEIGHT_IN, Camera* camera_in)
 {
     camera = camera_in;
 
@@ -18,8 +18,8 @@ Window::Window(const int &SCR_WIDTH_IN, const int &SCR_HEIGHT_IN, Camera* camera
     float yaw = -90.0f;     //left / right direction. Starting at -90 to face straight?
     float pitch = 0.0f;     //up / down
     float fov = 45.0f;
-    float lastX = static_cast<float>(SCR_WIDTH) / 2.0;
-    float lastY = static_cast<float>(SCR_HEIGHT) / 2.0;
+    float lastX = SCR_WIDTH / 2.0;
+    float lastY = SCR_HEIGHT / 2.0;
 }
 
 

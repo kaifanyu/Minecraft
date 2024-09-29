@@ -30,18 +30,16 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 		vertexCode = vShaderStream.str();
 		fragmentCode = fShaderStream.str();
-
-
 	}
-
 	catch (ifstream::failure* e)
 	{
 		std::cout << "ERROR::SHADER::FILE_NOT_READ: " << e->what() << endl;
 	}
 
+
 	const char* vertexShaderSource = vertexCode.c_str();
 	const char* fragmentShaderSource = fragmentCode.c_str();
-
+	
 	//create and compile vertex shader
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);   //create the shader
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);     //add our shader source code into shader

@@ -4,63 +4,6 @@
 #include <cglm/cglm.h>
 #include <vector>
 
-Render::Render()
-{
-    
-    object = {
-        //back square    
-            // back triangle
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            //other back traingle
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-        //front square
-            //front triangle
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            // other front triangle
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
-
-    object_count = 1;
-    init(object);
-}
-
 Render::Render(const std::vector<GLfloat> &object)
 {
     object_count = 1;
@@ -78,24 +21,19 @@ void Render::init(const std::vector<GLfloat>& object)
     glGenVertexArrays(object_count, &VAO);  //init VAO
     glGenBuffers(object_count, &VBO);       //init VBO
 
-    glBindVertexArray(VAO); //activate VAO
-    glBindBuffer(GL_ARRAY_BUFFER, VBO); //activate VBO
 
-    // put object in buffer
-    glBufferData(GL_ARRAY_BUFFER, object.size() * sizeof(GLfloat), object.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO); //activate VBO
+    glBufferData(GL_ARRAY_BUFFER, object.size() * sizeof(GLfloat), object.data(), GL_STATIC_DRAW); //Bind object to VBO
+
+    glBindVertexArray(VAO); //activate VAO
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-
-    // Texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
 }
 
 void Render::draw()
 {
-    // glBindVertexArray(VAO);  // Not sure if needed
+    glBindVertexArray(VAO);  // Not sure if needed
     glDrawArrays(GL_TRIANGLES, 0, 36);  // 6 faces * 2 triangles * 3 vertcies per triangle = 36
 }
