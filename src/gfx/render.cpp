@@ -4,10 +4,10 @@
 #include <cglm/cglm.h>
 #include <vector>
 
-Render::Render(const std::vector<GLfloat> &object)
+Render::Render(const std::vector<GLfloat> &object, const int attribute_count)
 {
     object_count = 1;
-    init(object);
+    init(object, attribute_count);
 }
 
 Render::~Render()
@@ -16,7 +16,7 @@ Render::~Render()
     glDeleteBuffers(object_count, &VBO);
 }
 
-void Render::init(const std::vector<GLfloat>& object)
+void Render::init(const std::vector<GLfloat>& object, const int attribute_count)
 {
     glGenVertexArrays(object_count, &VAO);  //init VAO
     glGenBuffers(object_count, &VBO);       //init VBO
@@ -28,8 +28,12 @@ void Render::init(const std::vector<GLfloat>& object)
     glBindVertexArray(VAO); //activate VAO
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, attribute_count * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    // normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, attribute_count * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 }
 
 void Render::draw()

@@ -38,56 +38,58 @@ int main() {
     
   
     vector<float> vertices = {
-        -0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f,  
-         0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f, -0.5f,  
-        -0.5f,  0.5f, -0.5f, 
-        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-        -0.5f, -0.5f,  0.5f, 
-         0.5f, -0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f, 
-        -0.5f, -0.5f,  0.5f, 
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
 
-        -0.5f,  0.5f,  0.5f, 
-        -0.5f,  0.5f, -0.5f, 
-        -0.5f, -0.5f, -0.5f, 
-        -0.5f, -0.5f, -0.5f, 
-        -0.5f, -0.5f,  0.5f, 
-        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f, -0.5f,  
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f, -0.5f,  0.5f,  
-        -0.5f, -0.5f,  0.5f, 
-        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-        -0.5f,  0.5f, -0.5f, 
-         0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f, 
-        -0.5f,  0.5f, -0.5f, 
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     };
+
+    int attribute_count = 6;
   
     // Create Shader
-    Shader colorShader(ASSETS_DIR "shaders/color.vs", ASSETS_DIR "shaders/color.fs");
-    Shader cubeShader(ASSETS_DIR "shaders/lightShader.vs", ASSETS_DIR "shaders/lightShader.fs");
+    Shader cubeShader(ASSETS_DIR "shaders/cube.vs", ASSETS_DIR "shaders/cube.fs");
+    Shader lightShader(ASSETS_DIR "shaders/light.vs", ASSETS_DIR "shaders/light.fs");
 
     // Create Render
-    Render render(vertices);
-    Render cube(vertices);
+    Render cube_render(vertices, attribute_count);
+    Render light_render(vertices, attribute_count);
     // Render loop
     while (!glfwWindowShouldClose(window.window)) {
         //get current Time
@@ -98,14 +100,16 @@ int main() {
         
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // background color
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        vec3 lightPos = {1.2f, 1.0f, 2.0f}; //temp
 
         // render 
-        colorShader.use();
-        colorShader.setVec3("objectColor", {1.0f, 0.5f, 0.31f});
-        colorShader.setVec3("lightColor", { 1.0f, 1.0f, 1.0f});
+        cubeShader.use();
+        cubeShader.setVec3("objectColor", {1.0f, 0.3f, 0.31f});
+        cubeShader.setVec3("lightColor", { 1.0f, 1.0f, 1.0f});
+        cubeShader.setVec3("lightPos", lightPos);
 
-
-        //Set up for colorShader
+        //Set up for cubeShader
         mat4 M_view, M_projection;    
         camera.get_view_matrix(M_view); //M_View
         glm_perspective(glm_rad(camera.fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);    //M_projection
@@ -113,24 +117,26 @@ int main() {
         //Set up M_Model
         mat4 M_model;
         glm_mat4_identity(M_model);
-        colorShader.setMat4("model", M_model);
-        colorShader.setMat4("view", M_view);
-        colorShader.setMat4("projection", M_projection);
-
-        render.draw(); //draw render
-
-
-        cubeShader.use();
-        mat4 cube_model;
-
-        glm_mat4_identity(cube_model);
-        glm_translate(cube_model, lightPos);
-        glm_scale_uni(cube_model, 0.2f);
-        cubeShader.setMat4("model", cube_model);
+        cubeShader.setMat4("model", M_model);
         cubeShader.setMat4("view", M_view);
         cubeShader.setMat4("projection", M_projection);
+        cubeShader.setVec3("viewPos", camera.cameraPos);
 
-        cube.draw();
+        cube_render.draw(); //draw render
+
+
+        lightShader.use();
+
+        mat4 light_model;
+
+        glm_mat4_identity(light_model);
+        glm_translate(light_model, lightPos);
+        glm_scale_uni(light_model, 0.2f);
+        lightShader.setMat4("model", light_model);
+        lightShader.setMat4("view", M_view);
+        lightShader.setMat4("projection", M_projection);
+
+        light_render.draw();
 
 
         glfwSwapBuffers(window.window); // Swap buffers
