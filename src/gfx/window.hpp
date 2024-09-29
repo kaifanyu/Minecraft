@@ -8,22 +8,24 @@ class Window{
     public:
     
         GLFWwindow* window;
+        Camera* camera;
+
         char* name;
         int SCR_WIDTH;
         int SCR_HEIGHT;
 
-        bool firstMouse = true;
+        bool firstMouse;
         float yaw;     //left / right direction. Starting at -90 to face straight?
         float pitch;     //up / down
         float fov;
         float lastX;
         float lastY;
 
-        Window(const int &SCR_WIDTH, const int &SCR_HEIGHT);
+        Window(const int &SCR_WIDTH, const int &SCR_HEIGHT, Camera* camera);
         bool init();
 
         void setCallbacks();
-        void processInput(Camera camera, const int& deltaTime);
+        void processInput(Camera* camera, const float& deltaTime);
 
     private:
         static void framebuffer_size_callback(GLFWwindow *window, int width, int height);

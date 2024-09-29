@@ -40,7 +40,6 @@ class Camera{
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
 
-
         Camera(vec3 cameraPosIn); //constructor for cameraPos;
         void process_keyboard(Camera_Movement direction, float deltaTime);
         void process_mouse_camera(const float xoffset, const float yoffset);

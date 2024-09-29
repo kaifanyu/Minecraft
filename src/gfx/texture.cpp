@@ -20,11 +20,11 @@ Texture::Texture(const char* path)
     load_image(path);
 }
 
-void Texture::bind(const int &texture_id)
+void Texture::bind() const
 {
     // bind textures according to texture_id
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_ID);
 }
 
 

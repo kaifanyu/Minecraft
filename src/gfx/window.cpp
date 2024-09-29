@@ -5,8 +5,10 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
-Window::Window(const int &SCR_WIDTH_IN, const int &SCR_HEIGHT_IN)
+Window::Window(const int &SCR_WIDTH_IN, const int &SCR_HEIGHT_IN, Camera* camera_in)
 {
+    camera = camera_in;
+
     SCR_WIDTH = SCR_WIDTH_IN;
     SCR_HEIGHT = SCR_HEIGHT_IN;
     window = nullptr;
@@ -16,9 +18,8 @@ Window::Window(const int &SCR_WIDTH_IN, const int &SCR_HEIGHT_IN)
     float yaw = -90.0f;     //left / right direction. Starting at -90 to face straight?
     float pitch = 0.0f;     //up / down
     float fov = 45.0f;
-    float lastX = 8000.0f / 2.0;
-    float lastY = 600.0f / 2.0;
-
+    float lastX = static_cast<float>(SCR_WIDTH) / 2.0;
+    float lastY = static_cast<float>(SCR_HEIGHT) / 2.0;
 }
 
 
@@ -52,14 +53,15 @@ bool Window::init()
         printf("Failed to initialize GLAD\n");
         return false;
     }
-
+    
+    glfwSetWindowUserPointer(window, this);  // Set the pointer to the current Window instance
+    return true;
 }
 
 void Window::setCallbacks()
 {
     // whenever the window changes in size, gflw calls this function and fills in proper arguments
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
     // mouse cursor movement
     glfwSetCursorPosCallback(window, mouse_callback);
     // mouse scroll movement
@@ -68,18 +70,18 @@ void Window::setCallbacks()
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void Window::processInput(Camera camera, const int &deltaTime)
+void Window::processInput(Camera* camera, const float &deltaTime)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.process_keyboard(FORWARD, deltaTime);
+        camera->process_keyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.process_keyboard(BACKWARD, deltaTime);
+        camera->process_keyboard(BACKWARD, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.process_keyboard(LEFT, deltaTime);
+        camera->process_keyboard(LEFT, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.process_keyboard(RIGHT, deltaTime);
+        camera->process_keyboard(RIGHT, deltaTime);
 }
 
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -89,29 +91,35 @@ void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height
 
 void Window::mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
 {
+    // Create a pointer to current window object 
+    Window* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
     float xpos = static_cast<float>(xposIn);    //convert double to float
     float ypos = static_cast<float>(yposIn);
 
-    if(firstMouse)  //init mouse
+    if(win->firstMouse)  //init mouse
     {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
+        win->lastX = xpos;
+        win->lastY = ypos;
+        win->firstMouse = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;   //y go from bottom to top
+    float xoffset = xpos - win->lastX;
+    float yoffset = win->lastY - ypos;   //y go from bottom to top
     
     float sens = 0.05f;
     xoffset *= sens;
     yoffset *= sens;
     
-    lastX = xpos;
-    lastY = ypos;
+    win->lastX = xpos;
+    win->lastY = ypos;
 
-    camera.process_mouse_camera(xoffset, yoffset);
+    win->camera->process_mouse_camera(xoffset, yoffset);
 }
 
 void Window::scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
+    Window* win = static_cast<Window*>(glfwGetWindowUserPointer(window));   //create window pointer that points to current Window
+    // Use camera pointer to call the function from main's Camera object
+    win->camera->process_scroll_camera(static_cast<float>(xoffset), static_cast<float>(yoffset));
 }
