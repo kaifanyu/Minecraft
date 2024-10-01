@@ -15,7 +15,7 @@ This is a minecraft clone project developed in C++ using OpenGL designed to run 
 
 <!-- Screenshot --> 
 <div align=center>
-  <img src="assets/images/cat.jpg" width="800" height="600" />
+  <img src="assets/images/minecraft.png" height="320" />
 </div>
 
 ### Features
