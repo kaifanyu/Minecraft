@@ -82,6 +82,10 @@ void Window::processInput(Camera* camera, const float &deltaTime)
         camera->process_keyboard(LEFT, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera->process_keyboard(RIGHT, deltaTime);
+    if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        camera->process_keyboard(UP, deltaTime);
+    if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        camera->process_keyboard(DOWN, deltaTime);
 }
 
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)

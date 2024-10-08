@@ -11,7 +11,7 @@ class Texture{
         GLuint texture_ID;
 
         Texture(const char* path);
-        void bind() const;
+        void bind(unsigned int program) const;
     private:
         void load_image(const char* path);
 };

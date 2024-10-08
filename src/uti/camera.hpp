@@ -9,7 +9,9 @@ enum Camera_Movement{
     FORWARD,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    UP,
+    DOWN,
 };
 
 const float Default_Yaw = -90.0f;     //left / right direction. Starting at -90 to face straight?
@@ -22,9 +24,9 @@ class Camera{
     public:
 
         //camera default settings
-        vec3 cameraPos;
-        vec3 cameraFront;
-        vec3 cameraUp;
+        vec3 cameraPos;         //position of the camera in the world
+        vec3 cameraFront;       //direction which the camera is looking at  (forward)
+        vec3 cameraUp;          //upward direction relative to the camera   (orientation)
 
         //mouse default settings
         bool firstMouse;

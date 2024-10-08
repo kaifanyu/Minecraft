@@ -21,6 +21,9 @@ include_directories(${CMAKE_SOURCE_DIR}/lib/cglm/include)
 # Include stb.h
 include_directories(${CMAKE_SOURCE_DIR}/lib/stb)
 
+# Include stb.h
+include_directories(${CMAKE_SOURCE_DIR}/lib/libfreetype2/freetype2/include)
+
 # Link GLAD source file (compile directly)
 add_library(glad STATIC lib/glad/src/glad.c)
 
@@ -41,5 +44,6 @@ endif()
 # Copy shader files to the build directory
 file(COPY ${CMAKE_SOURCE_DIR}/assets/shaders DESTINATION ${CMAKE_BINARY_DIR}/assets)
 file(COPY ${CMAKE_SOURCE_DIR}/assets/images DESTINATION ${CMAKE_BINARY_DIR}/assets)
+file(COPY ${CMAKE_SOURCE_DIR}/assets/textures DESTINATION ${CMAKE_BINARY_DIR}/assets)
 
 add_definitions(-DASSETS_DIR=\"${CMAKE_BINARY_DIR}/assets/\")

@@ -34,6 +34,15 @@ void Render::init(const std::vector<GLfloat>& object, const int attribute_count)
     // normal attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, attribute_count * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // texture attribute 
+    // index = 2 
+    // number of components (u, v) = 2;
+    // stride = number of bytes between each set = [3 (position) + 3 (normal) + 2 (texture)] = 8
+    // offset from start of vertex data = [3 (position) + 3 (normal)] = 6
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, attribute_count * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
 }
 
 void Render::draw()

@@ -9,6 +9,16 @@
 
 #include "uti/camera.hpp"
 
+#include "world/chunk.hpp"
+#include "world/block.hpp"
+
+#include <map>
+
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+
 #include <iostream>
 #include <vector>
 
@@ -21,75 +31,35 @@ float lastFrame = 0.0f;
 
 void updateDeltaTime();
 int main() {
+    
+    
     vec3 lightPos = {1.2f, 1.0f, 2.0f}; //temp
 
     // camera
-    vec3 cameraPos = {0.0f, 0.0f, 3.0f};
-    Camera camera(cameraPos); //create camera with default cameraPos
+    vec3 starting_cameraPos = {0.0f, 0.0f, 0.0f}; //start at 3
 
-    // Window
-    Window window(SCR_WIDTH, SCR_HEIGHT, &camera);
+
+    Camera camera(starting_cameraPos); //create camera with default cameraPos
+    Window window(SCR_WIDTH, SCR_HEIGHT, &camera);  //create window with camera object
+
     if (!window.init())
         return -1;  // If window initialization failed, exit
-    window.setCallbacks();
+    window.setCallbacks();  //set callbacks for resize, cursor inputs
 
     // configure global opengl state
     glEnable(GL_DEPTH_TEST);
-    
-  
-    vector<float> vertices = {
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+    Block dirtBlock(DIRT);
 
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-    };
-
-    int attribute_count = 6;
-  
     // Create Shader
     Shader cubeShader(ASSETS_DIR "shaders/cube.vs", ASSETS_DIR "shaders/cube.fs");
-    Shader lightShader(ASSETS_DIR "shaders/light.vs", ASSETS_DIR "shaders/light.fs");
+    Texture blockTextures(ASSETS_DIR "images/cat.jpg");
 
     // Create Render
-    Render cube_render(vertices, attribute_count);
-    Render light_render(vertices, attribute_count);
+    Render cube_render(dirtBlock.vertices, dirtBlock.attribute_count);
+
+    glEnable(GL_CULL_FACE);         // Enable face culling
+    glCullFace(GL_BACK);            // Cull back faces (default)
     // Render loop
     while (!glfwWindowShouldClose(window.window)) {
         //get current Time
@@ -100,49 +70,45 @@ int main() {
         
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // background color
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        vec3 lightPos = {1.2f, 1.0f, 2.0f}; //temp
 
-        // render 
+        vec3 lightPos = {1.2f, 1.0f, 2.0f}; //temp
+        vec3 blockPos = {0.0f, 0.0f, -3.0f};  //want block to be here?
+
+        
+        blockTextures.bind(cubeShader.ID);
+        // render + lightring for cubeShader
         cubeShader.use();
-        cubeShader.setVec3("objectColor", {1.0f, 0.3f, 0.31f});
         cubeShader.setVec3("lightColor", { 1.0f, 1.0f, 1.0f});
         cubeShader.setVec3("lightPos", lightPos);
 
-        //Set up for cubeShader
-        mat4 M_view, M_projection;    
-        camera.get_view_matrix(M_view); //M_View
-        glm_perspective(glm_rad(camera.fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);    //M_projection
+        //M_model tells OpenGL where the object is in the world: Move / Rotate / scale object
+        mat4 M_model;   //transforms object from original space to world space. 
+        glm_mat4_identity(M_model); //init the model to identity matrix so we can do calculations
+        glm_translate(M_model, blockPos);   //translate the model to blockPos
 
-        //Set up M_Model
-        mat4 M_model;
-        glm_mat4_identity(M_model);
+        //M_view represents camera's position and direction. Defines how world looks from view of camera
+        mat4 M_view;
+        camera.get_view_matrix(M_view); //get the view_matrix by 
+        
+        //M_projection defines how the 3D world is projected onto the 2D screen. Define FOV, aspect ratio, how far / close objects should appear
+        mat4 M_projection;    
+        glm_perspective(glm_rad(camera.fov), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 80.0f, M_projection);    //M_projection
         cubeShader.setMat4("model", M_model);
         cubeShader.setMat4("view", M_view);
         cubeShader.setMat4("projection", M_projection);
         cubeShader.setVec3("viewPos", camera.cameraPos);
 
         cube_render.draw(); //draw render
-
-
-        lightShader.use();
-
-        mat4 light_model;
-
-        glm_mat4_identity(light_model);
-        glm_translate(light_model, lightPos);
-        glm_scale_uni(light_model, 0.2f);
-        lightShader.setMat4("model", light_model);
-        lightShader.setMat4("view", M_view);
-        lightShader.setMat4("projection", M_projection);
-
-        light_render.draw();
-
-
+        
+        // printf("CameraPos: X:%f Y:%f Z:%f\n", camera.cameraPos[0], camera.cameraPos[1], camera.cameraPos[2]);
+        // printf("CameraUp: X:%f Y:%f Z:%f\n", camera.cameraUp[0], camera.cameraUp[1], camera.cameraUp[2]);
+        // printf("CameraFront: X:%f Y:%f Z:%f\n", camera.cameraFront[0], camera.cameraFront[1], camera.cameraFront[2]);
+        
         glfwSwapBuffers(window.window); // Swap buffers
         glfwPollEvents();// Poll for and process events
     }
 
+    
     glfwTerminate();
     return 0;
 }

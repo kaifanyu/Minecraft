@@ -8,29 +8,22 @@
 #include <iostream>
 
 using namespace std;
-class Shader
-{
-public:
-	unsigned int ID;
+class Shader {
+	public:
+		unsigned int ID;
+		//void setFloat(const std::string& name, int value) const;
 
-	//read and builds shader
+		Shader(const char* vertexPath, const char* fragmentPath);
 
-	//void setFloat(const std::string& name, int value) const;
-
-
-	Shader(const char* vertexPath, const char* fragmentPath);
-
-
-
-	//void setBool(const std::string& name, bool value) const; 
-	void setInt(const std::string& name, int value) const;
-	void setVec3(const std::string& name, const vec3 &vec3) const;
-	void setMat4(const std::string &name, const mat4 &mat) const;
-	void use();
+		//void setBool(const std::string& name, bool value) const; 
+		void setInt(const std::string& name, int value) const;
+		void setVec3(const std::string& name, const vec3 &vec3) const;
+		void setMat4(const std::string &name, const mat4 &mat) const;
+		void use();
 
 
-private:
-	void checkErrors(unsigned int shader, string type);
+	private:
+		void checkErrors(unsigned int shader, std::string type);
 };
 
 

@@ -30,28 +30,37 @@ void Camera::process_keyboard(Camera_Movement direction, float deltaTime)
     movementSpeed = Default_movementSpeedScalar * deltaTime;
     switch (direction)
     {
-    case FORWARD:
-        glm_vec3_scale(cameraFront, movementSpeed, temp);
-        glm_vec3_add(cameraPos, temp, cameraPos);
-        break;
-    case BACKWARD:
-        glm_vec3_scale(cameraFront, movementSpeed, temp);
-        glm_vec3_sub(cameraPos, temp, cameraPos);
-        break;
-    case LEFT:
-        glm_cross(cameraFront, cameraUp, temp);
-        glm_normalize(temp);
-        glm_vec3_scale(temp, movementSpeed, temp);
-        glm_vec3_sub(cameraPos, temp, cameraPos);
-        break;
-    case RIGHT:
-        glm_cross(cameraFront, cameraUp, temp);  //get the 'right' direction by crossing front and up
-        glm_normalize(temp); //normalize temp
-        glm_vec3_scale(temp, movementSpeed, temp); //scale temp by cameraSpeed basically 'incrementing' temp 
-        glm_vec3_add(cameraPos, temp, cameraPos); //add 'right' direction to
-        break;
-    default:
-        break;
+        case FORWARD:
+            glm_vec3_scale(cameraFront, movementSpeed, temp);
+            glm_vec3_add(cameraPos, temp, cameraPos);
+            break;
+        case BACKWARD:
+            glm_vec3_scale(cameraFront, movementSpeed, temp);
+            glm_vec3_sub(cameraPos, temp, cameraPos);
+            break;
+        case LEFT:
+            glm_cross(cameraFront, cameraUp, temp);
+            glm_normalize(temp);
+            glm_vec3_scale(temp, movementSpeed, temp);
+            glm_vec3_sub(cameraPos, temp, cameraPos);
+            break;
+        case RIGHT:
+            glm_cross(cameraFront, cameraUp, temp);  //get the 'right' direction by crossing front and up
+            glm_normalize(temp); //normalize temp
+            glm_vec3_scale(temp, movementSpeed, temp); //scale temp by cameraSpeed basically 'incrementing' temp 
+            glm_vec3_add(cameraPos, temp, cameraPos); //add 'right' direction to
+            break;
+        case UP:
+            //move vertically up
+            glm_vec3_scale(cameraUp, movementSpeed, temp);  //add mulitply camera up by movementspeed aka increase cameraUp
+            glm_vec3_add(cameraPos, temp, cameraPos);   //add camera up to camera position
+            break;
+        case DOWN:
+            glm_vec3_scale(cameraUp, movementSpeed, temp);  //add mulitply camera up by movementspeed aka increase cameraUp
+            glm_vec3_sub(cameraPos, temp, cameraPos);   //add camera up to camera position
+            break;
+        default:
+            break;
     }
 }
 

@@ -20,27 +20,38 @@ Texture::Texture(const char* path)
     load_image(path);
 }
 
-void Texture::bind() const
+void Texture::bind(unsigned int program) const
 {
     // bind textures according to texture_id
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_ID);
+    glUniform1i(glGetUniformLocation(program, "textureAtlas"), 0);
 }
 
 
 void Texture::load_image(const char* path)
 {
     int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-    unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0); //load image
+    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded textures on the y-axis.
+    unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0); // load image
 
     if(data)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        GLenum format;
+        if (nrChannels == 1)
+            format = GL_RED;  // handle grayscale images
+        else if (nrChannels == 3)
+            format = GL_RGB;  // standard RGB
+        else if (nrChannels == 4)
+            format = GL_RGBA; // RGBA with transparency
+        // Now create the texture
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        printf("Failed to load texture");
+    } 
+    else 
+    {
+        printf("Failed to load texture\n");
     }
 
-    stbi_image_free(data);  //free image
+    stbi_image_free(data);  // free image
 }
