@@ -1,24 +1,26 @@
-#include <string>
+#pragma once
+
 #include <vector>
 
+#include "direction.hpp"
 
 enum Block_Type{
-    DIRT = 0,
-    GRASS
+    DIRT,
+    GRASS,
+    AIR,
 };
-
-
-//Block("DIRT") will generate the vertices with correct texture verticies
 
 class Block{
     public:
-        std::vector<float> vertices;
-        int attribute_count;
         Block();
         Block(Block_Type type);
 
+        Block_Type getBlockType();
+        void setBlockType(Block_Type block_type);
+        
+        //return corresponding vertices to the block face
+        std::vector<float> getVertices(Direction Direction);
+        int getAttributes();
     private:
-        void init_vertex_vector();
-        void append_normal_vector();
-        void append_texture_vector(Block_Type type);
+        Block_Type block_type;
 };

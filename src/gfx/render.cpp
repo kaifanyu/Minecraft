@@ -1,8 +1,4 @@
 #include "render.hpp"
-#include <glad/glad.h>  //TODO: remove unnecessary #includes
-#include <GLFW/glfw3.h>
-#include <cglm/cglm.h>
-#include <vector>
 
 Render::Render(const std::vector<GLfloat> &object, const int attribute_count)
 {

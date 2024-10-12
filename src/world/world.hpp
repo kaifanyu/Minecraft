@@ -5,8 +5,10 @@
 
 class World{
     public:
-        Camera camera;
-
         World();
         void init_world();
+        Camera& getCamera();
+    private:
+        Camera camera;
+
 };

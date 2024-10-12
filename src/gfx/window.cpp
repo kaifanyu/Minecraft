@@ -55,6 +55,8 @@ bool Window::init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+
+
     window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, name, NULL, NULL);
 
     if (!window) {
@@ -73,6 +75,12 @@ bool Window::init()
     }
     
     glfwSetWindowUserPointer(window, this);  // Set the pointer to the current Window instance
+
+    setCallbacks();
+    
+    // configure global opengl state
+    glEnable(GL_DEPTH_TEST);
+
     return true;
 }
 

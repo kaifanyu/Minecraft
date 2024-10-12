@@ -1,11 +1,7 @@
 #include "texture.hpp"
-#include <glad/glad.h> //TODO: Remove excess includes
-#include <GLFW/glfw3.h>
-#include <cglm/cglm.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
 
 Texture::Texture()
 {
@@ -61,4 +57,9 @@ void Texture::load_image(const char* path)
     }
 
     stbi_image_free(data);  // free image
+}
+
+GLuint Texture::getTextureID() const
+{
+    return texture_ID;
 }

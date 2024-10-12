@@ -22,6 +22,6 @@ class Renderer{
         Texture texture;
         
         Renderer();
-        void render_block(mat4 &M_model, Camera &camera, Block &block) const;
+        void render_block_face(mat4 &M_model, Camera &camera, Block &block, Direction direction) const;
 
 };

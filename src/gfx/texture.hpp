@@ -2,17 +2,16 @@
 
 #include <glad/glad.h> //TODO: Remove excess includes
 #include <GLFW/glfw3.h>
-#include <cglm/cglm.h>
 
-#include <vector>
+
 class Texture{
     public:
-
-        GLuint texture_ID;
 
         Texture();
         Texture(const char* path);
         void bind(unsigned int program) const;
+        GLuint getTextureID() const;
     private:
+        GLuint texture_ID;
         void load_image(const char* path);
 };

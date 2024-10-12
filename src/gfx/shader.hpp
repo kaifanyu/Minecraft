@@ -10,9 +10,6 @@
 using namespace std;
 class Shader {
 	public:
-		unsigned int ID;
-		//void setFloat(const std::string& name, int value) const;
-		
 		Shader();
 		Shader(const char* vertexPath, const char* fragmentPath);
 
@@ -22,8 +19,10 @@ class Shader {
 		void setMat4(const std::string &name, const mat4 &mat) const;
 		void use();
 
+		unsigned int getID() const;
 
 	private:
+		unsigned int ID;
 		void checkErrors(unsigned int shader, std::string type);
 };
 

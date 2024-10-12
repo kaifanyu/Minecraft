@@ -15,18 +15,11 @@ void updateDeltaTime();
 int main() {
 
     World world;    //Create the world object
-    Window window(&world.camera);  //create window with world.camera object
+    Window window(&world.getCamera());  //create window with world.camera object
 
     if (!window.init())
         return -1;  // If window initialization failed, exit
-    window.setCallbacks();  //set callbacks for resize, cursor inputs
 
-    // // configure global opengl state
-    glEnable(GL_DEPTH_TEST);
-    
-    // glEnable(GL_CULL_FACE);         // Enable face culling
-    // glCullFace(GL_BACK);            // Cull back faces (default)
-    
     world.init_world(); //init the world
 
     // Render loop
@@ -40,7 +33,7 @@ int main() {
         world.init_world(); //init the world
 
         // checks input
-        window.processInput(world.camera, deltaTime);
+        window.processInput(world.getCamera(), deltaTime);
 
         glfwSwapBuffers(window.window); // Swap buffers
         glfwPollEvents();// Poll for and process events

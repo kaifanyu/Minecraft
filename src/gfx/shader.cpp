@@ -1,9 +1,4 @@
 #include "shader.hpp"
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-
 
 Shader::Shader()
 {
@@ -90,6 +85,11 @@ void Shader::setVec3(const std::string &name, const vec3 &vec3) const
 void Shader::setMat4(const std::string &name, const mat4 &mat4 ) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, (const float*)mat4);
+}
+
+unsigned int Shader::getID() const
+{
+	return ID;
 }
 
 void Shader::checkErrors(unsigned int shader, string type)

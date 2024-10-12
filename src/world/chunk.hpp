@@ -9,5 +9,6 @@ class Chunk
     public:
         Chunk();
         void initChunk(Camera &camera);
-
+        void generateChunk();
+        void render_block(mat4 M_model, Block_Type type);
 };

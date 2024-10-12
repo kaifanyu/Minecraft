@@ -11,15 +11,15 @@ Renderer::Renderer()
     glm_vec3_copy(vec3{1.0f, 1.0f, 1.0f}, light_color);   //set starting position for light 
 };
 
-void Renderer::render_block(mat4 &M_model, Camera &camera, Block &block) const
+void Renderer::render_block_face(mat4 &M_model, Camera &camera, Block &block, Direction direction) const
 {
-    printf("Rendering BlocK");
-    
-    Render block_render(block.vertices, block.attribute_count);
+
+    Render block_render(block.getVertices(direction), block.getAttributes());
+
     Shader block_shader(ASSETS_DIR "shaders/cube.vs", ASSETS_DIR "shaders/cube.fs");
     Texture block_texture(ASSETS_DIR "images/cat.jpg");
 
-    block_texture.bind(block_shader.ID);    //bind texture to shader 
+    block_texture.bind(block_shader.getID());    //bind texture to shader 
 
     block_shader.use();
     block_shader.setVec3("lightColor", light_color);
@@ -36,6 +36,5 @@ void Renderer::render_block(mat4 &M_model, Camera &camera, Block &block) const
     block_shader.setMat4("projection", M_projection);
     block_shader.setVec3("viewPos", camera.cameraPos);
 
-    glm_mat4_print(M_model, stdout);
     block_render.draw();
 }
