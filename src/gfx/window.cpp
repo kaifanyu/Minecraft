@@ -5,12 +5,11 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
-Window::Window(const float &SCR_WIDTH_IN, const float &SCR_HEIGHT_IN, Camera* camera_in)
-{
-    camera = camera_in;
 
-    SCR_WIDTH = SCR_WIDTH_IN;
-    SCR_HEIGHT = SCR_HEIGHT_IN;
+Window::Window()
+{
+    SCR_WIDTH = 600;
+    SCR_HEIGHT = 800;
     window = nullptr;
     name = "Walmart Minecraft";
 
@@ -18,8 +17,27 @@ Window::Window(const float &SCR_WIDTH_IN, const float &SCR_HEIGHT_IN, Camera* ca
     float yaw = -90.0f;     //left / right direction. Starting at -90 to face straight?
     float pitch = 0.0f;     //up / down
     float fov = 45.0f;
-    float lastX = SCR_WIDTH / 2.0;
-    float lastY = SCR_HEIGHT / 2.0;
+    float lastX = SCR_WIDTH / 2.0f;
+    float lastY = SCR_HEIGHT / 2.0f;
+}
+
+
+Window::Window(Camera* camera_in)
+{
+    camera = camera_in;
+    SCR_WIDTH = 600;
+    SCR_HEIGHT = 800;
+    window = nullptr;
+    name = "Walmart Minecraft";
+
+    bool firstMouse = true;
+    float yaw = -90.0f;     //left / right direction. Starting at -90 to face straight?
+    float pitch = 0.0f;     //up / down
+    float fov = 45.0f;
+    float lastX = (float)SCR_WIDTH / 2.0f;
+    float lastY = (float)SCR_HEIGHT / 2.0f;
+
+    printf("Created window\n");
 }
 
 
@@ -70,22 +88,22 @@ void Window::setCallbacks()
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void Window::processInput(Camera* camera, const float &deltaTime)
+void Window::processInput(Camera& camera, const float &deltaTime)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera->process_keyboard(FORWARD, deltaTime);
+        camera.process_keyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera->process_keyboard(BACKWARD, deltaTime);
+        camera.process_keyboard(BACKWARD, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera->process_keyboard(LEFT, deltaTime);
+        camera.process_keyboard(LEFT, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera->process_keyboard(RIGHT, deltaTime);
+        camera.process_keyboard(RIGHT, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        camera->process_keyboard(UP, deltaTime);
+        camera.process_keyboard(UP, deltaTime);
     if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-        camera->process_keyboard(DOWN, deltaTime);
+        camera.process_keyboard(DOWN, deltaTime);
 }
 
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)

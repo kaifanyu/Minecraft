@@ -2,10 +2,12 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
+#include "../gfx/renderer.hpp"
 
 class Chunk
 {
     public:
-        void initChunk();
+        Chunk();
+        void initChunk(Camera &camera);
 
 };

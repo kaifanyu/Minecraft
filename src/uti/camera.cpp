@@ -2,7 +2,25 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 
-Camera::Camera(vec3 camearPosIn)
+Camera::Camera()
+{
+    vec3 cameraPosIn = {0.0f, 0.0f, 0.0f};
+    
+    firstMouse = true;
+
+    yaw = Default_Yaw;
+    pitch = Default_Pitch;
+    fov = Default_Fov;
+    sensitivity = Default_Senstivity;
+
+    //init camera values
+    glm_vec3_copy(cameraPosIn, cameraPos); 
+    glm_vec3_copy(vec3{0.0f, 0.0f, -1.0f}, cameraFront);
+    glm_vec3_copy(vec3{0.0f, 1.0f, 0.0f}, cameraUp);   
+    printf("Created Camera \n");
+}
+
+Camera::Camera(vec3 cameraPosIn)
 {
     firstMouse = true;
 
@@ -12,7 +30,7 @@ Camera::Camera(vec3 camearPosIn)
     sensitivity = Default_Senstivity;
 
     //init camera values
-    glm_vec3_copy(camearPosIn, cameraPos); 
+    glm_vec3_copy(cameraPosIn, cameraPos); 
     glm_vec3_copy(vec3{0.0f, 0.0f, -1.0f}, cameraFront);
     glm_vec3_copy(vec3{0.0f, 1.0f, 0.0f}, cameraUp);
 }

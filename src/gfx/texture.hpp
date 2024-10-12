@@ -10,6 +10,7 @@ class Texture{
 
         GLuint texture_ID;
 
+        Texture();
         Texture(const char* path);
         void bind(unsigned int program) const;
     private:

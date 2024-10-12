@@ -21,8 +21,8 @@ include_directories(${CMAKE_SOURCE_DIR}/lib/cglm/include)
 # Include stb.h
 include_directories(${CMAKE_SOURCE_DIR}/lib/stb)
 
-# Include stb.h
-include_directories(${CMAKE_SOURCE_DIR}/lib/libfreetype2/freetype2/include)
+# # Include freetype2.h
+# include_directories(${CMAKE_SOURCE_DIR}/lib/libfreetype2/freetype2/include)
 
 # Link GLAD source file (compile directly)
 add_library(glad STATIC lib/glad/src/glad.c)

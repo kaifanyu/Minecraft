@@ -6,6 +6,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+
+Texture::Texture()
+{
+    texture_ID = 0;
+}
+
+
 Texture::Texture(const char* path)
 {
     glGenTextures(1, &texture_ID);    //Generate 1 texture
