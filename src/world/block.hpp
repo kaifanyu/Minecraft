@@ -23,4 +23,5 @@ class Block{
         int getAttributes();
     private:
         Block_Type block_type;
+        static const block_vertcies; 
 };
