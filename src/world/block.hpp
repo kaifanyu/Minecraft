@@ -1,27 +1,27 @@
 #pragma once
 
 #include <vector>
-
+#include <map>
 #include "direction.hpp"
 
 enum Block_Type{
-    DIRT,
-    GRASS,
-    AIR,
+    AIR = 0,
+    DIRT = 1,
+    GRASS = 2,
+};
+
+enum Block_State{
+    Opaque = 0,
+    Transparent = 1,
 };
 
 class Block{
     public:
         Block();
-        Block(Block_Type type);
-
-        Block_Type getBlockType();
-        void setBlockType(Block_Type block_type);
-        
-        //return corresponding vertices to the block face
-        std::vector<float> getVertices(Direction Direction);
-        int getAttributes();
+        Block(Block_Type type, Block_State state);
+        // Block_Type getBlockType();
+        // void setBlockType();
     private:
-        Block_Type block_type;
-        static const block_vertcies; 
+        int id;
+        int state;
 };

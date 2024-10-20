@@ -7,7 +7,10 @@
 
 class Render{
     public:
+
+        Render();
         Render(const std::vector<GLfloat>& object, const int attribute_count); //constructor
+        void setRender(const std::vector<GLfloat>& object, const int attribute_count);
         ~Render();  //destructor
         void draw();
 

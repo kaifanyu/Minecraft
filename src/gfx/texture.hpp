@@ -8,7 +8,8 @@ class Texture{
     public:
 
         Texture();
-        Texture(const char* path);
+        void setTexture(const char* path);
+        // Texture(const char* path);
         void bind(unsigned int program) const;
         GLuint getTextureID() const;
     private:

@@ -12,6 +12,7 @@ float lastFrame = 0.0f;
 
 void updateDeltaTime();
 
+
 int main() {
 
     World world;    //Create the world object
@@ -30,7 +31,7 @@ int main() {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // background color
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        world.init_world(); //init the world
+        world.render_world(); //init the world
 
         // checks input
         window.processInput(world.getCamera(), deltaTime);
@@ -38,7 +39,6 @@ int main() {
         glfwSwapBuffers(window.window); // Swap buffers
         glfwPollEvents();// Poll for and process events
     }
-
     
     glfwTerminate();
     return 0;

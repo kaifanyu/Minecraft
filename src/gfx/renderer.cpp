@@ -8,17 +8,34 @@
 Renderer::Renderer()
 {
     glm_vec3_copy(vec3{1.2f, 1.0f, 2.0f}, light_pos);   //set starting position for light 
-    glm_vec3_copy(vec3{1.0f, 1.0f, 1.0f}, light_color);   //set starting position for light 
+    glm_vec3_copy(vec3{1.0f, 1.0f, 1.0f}, light_color);   //set starting position for light
 };
 
-void Renderer::render_block_face(mat4 &M_model, Camera &camera, Block &block, Direction direction) const
+void Renderer::init_renderer()
 {
+    block_shader.setShader(ASSETS_DIR "shaders/cube.vs", ASSETS_DIR "shaders/cube.fs");
+    block_texture.setTexture(ASSETS_DIR "images/cat.jpg");
+}
 
-    Render block_render(block.getVertices(direction), block.getAttributes());
 
-    Shader block_shader(ASSETS_DIR "shaders/cube.vs", ASSETS_DIR "shaders/cube.fs");
-    Texture block_texture(ASSETS_DIR "images/cat.jpg");
+Render Renderer::get_render()
+{
+    return block_render;
+}
 
+Shader Renderer::get_shader()
+{
+    return block_shader;
+}
+
+Texture Renderer::get_texture()
+{
+    return block_texture;
+}
+
+
+void Renderer::render_block_face(mat4 &M_model, Camera &camera, Block &block, Direction direction) 
+{
     block_texture.bind(block_shader.getID());    //bind texture to shader 
 
     block_shader.use();

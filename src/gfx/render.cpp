@@ -1,5 +1,17 @@
 #include "render.hpp"
 
+
+Render::Render()
+{
+    //empty constructor
+}
+
+void Render::setRender(const std::vector<GLfloat> &object, const int attribute_count)
+{
+    object_count = 1;
+    init(object, attribute_count);
+}
+
 Render::Render(const std::vector<GLfloat> &object, const int attribute_count)
 {
     object_count = 1;

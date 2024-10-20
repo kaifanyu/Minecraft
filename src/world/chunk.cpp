@@ -2,55 +2,56 @@
 
 Chunk::Chunk()
 {
-
+    printf("Created Chunk\n");
 }
 
-
-
-void Chunk::initChunk(Camera &camera)
+std::vector<tuple<int, int, int>> Chunk::getVertices()
 {
-    //i`nit a 16 x 16 blocks
-    Block dirtBlock(DIRT); //create a dirt block
-
-    //render the dirtblock. Call renderer class next
-    Renderer renderer;
-
-    //Create model view for position
-    mat4 M_model;
-    vec3 blockPos = {0.0f, 0.0f, -3.0f};  //want block to be here?
-
-    glm_mat4_identity(M_model); //init the model to identity matrix so we can do calculations
-    glm_translate(M_model, blockPos);   //translate the model to blockPos
-
-    renderer.render_block_face(M_model, camera, dirtBlock, Direction::FRONT);
-    renderer.render_block_face(M_model, camera, dirtBlock, Direction::BACK);
-    renderer.render_block_face(M_model, camera, dirtBlock, Direction::TOP);
-    renderer.render_block_face(M_model, camera, dirtBlock, Direction::BOTTOM);
-    renderer.render_block_face(M_model, camera, dirtBlock, Direction::LEFT);
-    renderer.render_block_face(M_model, camera, dirtBlock, Direction::RIGHT);
-
+    return vertices;
 }
 
 
 
-void Chunk::generateChunk()
+
+//initalizes a chunk object
+void Chunk::initChunk(Camera &camera, int x_offset, int z_offset)
 {
-    //for loop to deteremine x, y, z coords for each chunk.
-
-    //TEMP
-    mat4 M_model;
-    vec3 blockPos = {0.0f, 0.0f, -3.0f};  //want block to be here?
-
-    glm_mat4_identity(M_model); //init the model to identity matrix so we can do calculations
-    glm_translate(M_model, blockPos);   //translate the model to blockPos
-
-    //using M_model, we now render the block
-    render_block(M_model, DIRT);
+    for(int x = 0; x < CHUNK_SIZE_X; x++)
+    {
+        for(int y = 0; y < CHUNK_SIZE_Y; y++)
+        {
+            for(int z = 0; z < CHUNK_SIZE_Z; z++)
+            {
+                //add verticies to vertices array
+                vertices.push_back(std::make_tuple(x+x_offset, y, z+z_offset));
+                //Add block to blocks array
+                Block newBlock(Block_Type::AIR, Block_State::Opaque);
+                blocks[x][y][z] = newBlock;
+            }
+        }
+    }
 }
 
-void Chunk::render_block(mat4 M_model, Block_Type blockType)
+
+void Chunk::calculate_VAO()
 {
-    //check which sides of the block needs to be rendered
-    
+
 }
 
+
+void Chunk::renderChunk(Renderer* block_renderer, std::unordered_map<Direction, std::vector<GLfloat>>& block_map)
+{
+    std::cout << "Rendeing this chunk" << endl;
+    vector<GLfloat> final_V;
+    for (auto& pair : block_map) {
+        final_V.insert(final_V.end(), pair.second.begin(), pair.second.end());
+    }
+
+    block_renderer->get_texture().bind(block_renderer->get_shader().getID());
+    block_renderer->get_render().setRender(final_V, 8); //set render with verticies
+
+    block_renderer->get_render().draw();
+
+    //to render a block, i need to 1. pass in the vao / vbo
+
+}

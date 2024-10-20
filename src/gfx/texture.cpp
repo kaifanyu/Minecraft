@@ -8,8 +8,7 @@ Texture::Texture()
     texture_ID = 0;
 }
 
-
-Texture::Texture(const char* path)
+void Texture::setTexture(const char* path)
 {
     glGenTextures(1, &texture_ID);    //Generate 1 texture
     glBindTexture(GL_TEXTURE_2D, texture_ID);
@@ -22,6 +21,20 @@ Texture::Texture(const char* path)
 
     load_image(path);
 }
+
+// Texture::Texture(const char* path)
+// {
+//     glGenTextures(1, &texture_ID);    //Generate 1 texture
+//     glBindTexture(GL_TEXTURE_2D, texture_ID);
+
+//     // Set texture wrapping and filtering options
+//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
+//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+//     load_image(path);
+// }
 
 void Texture::bind(unsigned int program) const
 {
