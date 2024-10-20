@@ -11,8 +11,6 @@ std::vector<tuple<int, int, int>> Chunk::getVertices()
 }
 
 
-
-
 //initalizes a chunk object
 void Chunk::initChunk(Camera &camera, int x_offset, int z_offset)
 {
@@ -30,28 +28,4 @@ void Chunk::initChunk(Camera &camera, int x_offset, int z_offset)
             }
         }
     }
-}
-
-
-void Chunk::calculate_VAO()
-{
-
-}
-
-
-void Chunk::renderChunk(Renderer* block_renderer, std::unordered_map<Direction, std::vector<GLfloat>>& block_map)
-{
-    std::cout << "Rendeing this chunk" << endl;
-    vector<GLfloat> final_V;
-    for (auto& pair : block_map) {
-        final_V.insert(final_V.end(), pair.second.begin(), pair.second.end());
-    }
-
-    block_renderer->get_texture().bind(block_renderer->get_shader().getID());
-    block_renderer->get_render().setRender(final_V, 8); //set render with verticies
-
-    block_renderer->get_render().draw();
-
-    //to render a block, i need to 1. pass in the vao / vbo
-
 }

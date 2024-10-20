@@ -1,12 +1,12 @@
 #pragma once
 
 enum class Direction{
-    TOP,
-    BOTTOM,
-    LEFT,
-    RIGHT,
-    FRONT,
-    BACK,
+    FRONT = 0,
+    BACK = 1,
+    LEFT = 2,
+    RIGHT = 3,
+    TOP = 4,
+    BOTTOM = 5,
 };
 
 struct DirectionOffset{

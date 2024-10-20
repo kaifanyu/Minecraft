@@ -2,6 +2,7 @@
 
 #include "../uti/camera.hpp"
 #include "chunk.hpp"
+#include "../gfx/mesh.hpp"
 
 #include <unordered_map>
 #include <tuple>
@@ -18,20 +19,24 @@ enum Biome_type{
 };
 
 
+
 class World{
 
     public:
         World();  
         void init_world();
         void render_world();
+        void render_chunk(Chunk &chunk);
         Camera& getCamera();
 
         void generateChunk(Biome_type Biome_type, int x_pos, int z_pos);
     private:
         Camera camera;  //Player Camera
         Renderer block_renderer; //Block Renderer for chunks
-        
+        Mesh blockMesh;
+                
         std::vector<Chunk> world_chunks;
         std::unordered_map<Direction, std::vector<GLfloat>> block_map;
+
         int renderDistance;
 };

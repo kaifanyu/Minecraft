@@ -6,12 +6,6 @@ Render::Render()
     //empty constructor
 }
 
-void Render::setRender(const std::vector<GLfloat> &object, const int attribute_count)
-{
-    object_count = 1;
-    init(object, attribute_count);
-}
-
 Render::Render(const std::vector<GLfloat> &object, const int attribute_count)
 {
     object_count = 1;
@@ -24,16 +18,22 @@ Render::~Render()
     glDeleteBuffers(object_count, &VBO);
 }
 
+void Render::setRender(const std::vector<GLfloat> &object, const int attribute_count)
+{
+    object_count = 1;
+    init(object, attribute_count);
+}
+
 void Render::init(const std::vector<GLfloat>& object, const int attribute_count)
 {
     glGenVertexArrays(object_count, &VAO);  //init VAO
     glGenBuffers(object_count, &VBO);       //init VBO
 
+    glBindVertexArray(VAO); //activate VAO
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO); //activate VBO
     glBufferData(GL_ARRAY_BUFFER, object.size() * sizeof(GLfloat), object.data(), GL_STATIC_DRAW); //Bind object to VBO
 
-    glBindVertexArray(VAO); //activate VAO
 
     // Position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, attribute_count * sizeof(float), (void*)0);

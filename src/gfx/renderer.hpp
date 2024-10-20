@@ -17,19 +17,17 @@ class Renderer{
         vec3 light_color;
         vec3 starting_cameraPos = {0.0f, 0.0f, 0.0f}; //start at 3
 
-        mat4 M_model;
-        Shader shader;
-        Texture texture;
-        
         Renderer();
         void init_renderer();
         Render get_render();
+        void set_render(std::vector<GLfloat>& vertices);
         Shader get_shader();
         Texture get_texture();
-        void render_block_face(mat4 &M_model, Camera &camera, Block &block, Direction direction);
+        void render(Camera& camera);
 
     private:
         Render block_render;
+        mat4 M_view, M_projection;
         Shader block_shader;
         Texture block_texture;
 };

@@ -1,9 +1,6 @@
 #include "world/world.hpp"
 #include "gfx/window.hpp"
 
-// #include <ft2build.h>
-// #include FT_FREETYPE_H
-
 #include <iostream>
 #include <vector>
 
@@ -27,13 +24,8 @@ int main() {
     while (!glfwWindowShouldClose(window.window)) {
         //get current Time
         updateDeltaTime();
-        
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // background color
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        world.render_world(); //init the world
-
-        // checks input
+        world.render_world();
         window.processInput(world.getCamera(), deltaTime);
 
         glfwSwapBuffers(window.window); // Swap buffers

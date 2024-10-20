@@ -12,8 +12,6 @@ class Chunk
     public:
         Chunk();
         void initChunk(Camera &camera, int x_offset, int z_offset); 
-        void calculate_VAO();
-        void renderChunk(Renderer* block_renderer, std::unordered_map<Direction, std::vector<GLfloat>>& block_map);
         std::vector<std::tuple<int, int, int>> getVertices();
 
     private:
