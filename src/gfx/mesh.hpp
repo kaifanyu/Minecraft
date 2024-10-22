@@ -22,11 +22,12 @@ class Mesh {
         Mesh();
         void update_position(float xOffset, float yOffset, float zOffset);
         void printVertices() const;
+        void addFace();
         std::vector<GLfloat> getFace(Direction direction);
+        static std::vector<Vertex> default_faces[6];
     private:
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indicies; //optional??
 
-        static std::vector<Vertex> default_faces[6];
         void init_default_faces();
 };

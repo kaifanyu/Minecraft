@@ -58,15 +58,17 @@ void World::render_world()
 
 void World::render_chunk(Chunk &chunk)
 {
-    
     // int x, y, z;
     vector<GLfloat> chunk_vertices;
-
     chunk_vertices = blockMesh.getFace(Direction::LEFT);
 
     vector<GLfloat> right_v;
     right_v = blockMesh.getFace(Direction::RIGHT);
+
+
     chunk_vertices.insert(chunk_vertices.end(), right_v.begin(), right_v.end());
+    
+
 
     block_renderer.set_render(chunk_vertices);
     block_renderer.render(camera);

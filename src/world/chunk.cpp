@@ -2,6 +2,7 @@
 
 Chunk::Chunk()
 {
+    vao_vertices = {};
     printf("Created Chunk\n");
 }
 
@@ -9,6 +10,21 @@ std::vector<tuple<int, int, int>> Chunk::getVertices()
 {
     return vertices;
 }
+
+void Chunk::printVertices()
+{
+    std::cout << "Start: " << endl;
+    for(auto& vert : vertices)
+    {
+        int x, y, z;
+
+        std::tie(x, y, z) = vert;
+
+        std::cout << "x: " << x << " y: " << y << " z: " << z << endl;
+    }
+    std::cout << "Stop: " << endl;
+}
+
 
 
 //initalizes a chunk object
@@ -27,5 +43,21 @@ void Chunk::initChunk(Camera &camera, int x_offset, int z_offset)
                 blocks[x][y][z] = newBlock;
             }
         }
+    }
+}
+
+void Chunk::populate_faces()
+{
+    vector<GLfloat> chunk_block;
+    for (const auto& vertex : vertices)
+    {
+        int x, y, z;
+        std::tie(x, y, z) = vertex;
+
+        vector<GLfloat> temp;
+        temp = block_mesh.getFace(Direction::LEFT);
+
+        
+        chunk_block.insert(chunk_block.end(), temp.begin(), temp.end());
     }
 }
