@@ -4,6 +4,7 @@ std::vector<Vertex> Mesh::default_faces[6];  // Definition
 
 Mesh::Mesh()
 {
+    vertices = {};
     init_default_faces();
 }
 
@@ -61,44 +62,86 @@ void Mesh::init_default_faces()
     };
 }
 
-std::vector<GLfloat> Mesh::getFace(Direction direction)
+
+std::vector<Vertex> Mesh::getVertices() const
 {
-    std::vector<Vertex> faceVertices = default_faces[static_cast<int>(direction)];
-    std::vector<GLfloat> floatVector(faceVertices.size() * 8);  // Pre-allocate exact size
+    return vertices;
+}
 
-    GLfloat* dataPtr = floatVector.data();  // Get a raw pointer to the underlying data
-
-    for (const auto& vertex : faceVertices)
+void Mesh::addVertex(vec3 offset)
+{
+    // Iterate over the 6 faces of the cube (default_faces is an array of 6 vectors)
+    for (int i = 0; i < 6; i++)
     {
-        // Use memcpy to copy vec3 and vec2 data
-        std::memcpy(dataPtr, vertex.position, 3 * sizeof(GLfloat));
-        dataPtr += 3;
-        std::memcpy(dataPtr, vertex.normal, 3 * sizeof(GLfloat));
-        dataPtr += 3;
-        std::memcpy(dataPtr, vertex.texCoords, 2 * sizeof(GLfloat));
-        dataPtr += 2;
-    }
+        // Iterate over the vertices in each face
+        for (size_t j = 0; j < default_faces[i].size(); j++)
+        {
+            // Update the position of each vertex with the offset
+            update_position(offset, default_faces[i][j]);
+        }
 
-    return floatVector;
+        // Insert the updated vertices into the main vertices vector
+        vertices.insert(vertices.end(), default_faces[i].begin(), default_faces[i].end());
+    }
+}
+
+void Mesh::update_position(vec3 offset, Vertex& vertexPointer)
+{
+    // Update the vertex position by adding the offset
+    glm_vec3_add(vertexPointer.position, offset, vertexPointer.position);
 }
 
 
+// std::vector<GLfloat> Mesh::getFace(Direction direction)
+// {
+//     std::vector<Vertex> faceVertices = default_faces[static_cast<int>(direction)];
+//     std::vector<GLfloat> floatVector(faceVertices.size() * 8);  // Pre-allocate exact size
 
-void Mesh::update_position(float xOffset, float yOffset, float zOffset)
-{
-    vec3 offset = {xOffset, yOffset, zOffset};
+//     GLfloat* dataPtr = floatVector.data();  // Get a raw pointer to the underlying data
 
-    for(auto& vertex : vertices)
-    {
-        glm_vec3_add(offset, vertex.position, vertex.position);
-    }
-}
+//     for (const auto& vertex : faceVertices)
+//     {
+//         // Use memcpy to copy vec3 and vec2 data
+//         std::memcpy(dataPtr, vertex.position, 3 * sizeof(GLfloat));
+//         dataPtr += 3;
+//         std::memcpy(dataPtr, vertex.normal, 3 * sizeof(GLfloat));
+//         dataPtr += 3;
+//         std::memcpy(dataPtr, vertex.texCoords, 2 * sizeof(GLfloat));
+//         dataPtr += 2;
+//     }
+
+//     return floatVector;
+// }
+
 
 
 // Optionally, print the vertices (for debugging)
 void Mesh::printVertices() const 
 {
-    for (const auto& vertex : vertices) {
-        printf("Position: (%f, %f, %f)\n", vertex.position[0], vertex.position[1], vertex.position[2]);
+
+    for (size_t i = 0; i < vertices.size(); ++i) {
+        const Vertex& vertex = vertices[i];
+        
+        // Print vertex index
+        std::cout << "Vertex " << i + 1 << ":\n";
+
+        // Print position
+        std::cout << "  Position: (" 
+                  << vertex.position[0] << ", "
+                  << vertex.position[1] << ", "
+                  << vertex.position[2] << ")\n";
+
+        // Print normal
+        std::cout << "  Normal: (" 
+                  << vertex.normal[0] << ", "
+                  << vertex.normal[1] << ", "
+                  << vertex.normal[2] << ")\n";
+
+        // Print texture coordinates
+        std::cout << "  Texture Coordinates: (" 
+                  << vertex.texCoords[0] << ", "
+                  << vertex.texCoords[1] << ")\n";
+
+        std::cout << std::endl;
     }
 }

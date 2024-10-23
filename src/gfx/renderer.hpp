@@ -20,9 +20,11 @@ class Renderer{
         Renderer();
         void init_renderer();
         Render get_render();
-        void set_render(std::vector<GLfloat>& vertices);
+        void set_render(std::vector<Vertex>& vertices);
+
         Shader get_shader();
         Texture get_texture();
+        
         void render(Camera& camera);
 
     private:

@@ -39,7 +39,7 @@ void World::init_world()
         {
             printf("Generating chunk for biome Desert. X: %d Z: %d\n", x, z);
             //load chunk with offset
-            generateChunk(biome_type, x, z);
+            generateChunk(biome_type, x * 3, z * 3);
         }
     }
 }
@@ -51,28 +51,17 @@ void World::render_world()
     for(auto& chunk: world_chunks)
     {
         render_chunk(chunk);
-        break;
     }
 }
 
 
 void World::render_chunk(Chunk &chunk)
 {
-    // int x, y, z;
-    vector<GLfloat> chunk_vertices;
-    chunk_vertices = blockMesh.getFace(Direction::LEFT);
-
-    vector<GLfloat> right_v;
-    right_v = blockMesh.getFace(Direction::RIGHT);
-
-
-    chunk_vertices.insert(chunk_vertices.end(), right_v.begin(), right_v.end());
-    
-
-
-    block_renderer.set_render(chunk_vertices);
+    for(auto& chunk : world_chunks)
+    {
+        block_renderer.set_render(chunk.getVertices());
+    }
     block_renderer.render(camera);
-
 }
 
 

@@ -15,13 +15,16 @@ enum Block_State{
     Transparent = 1,
 };
 
+
 class Block{
     public:
         Block();
         Block(Block_Type type, Block_State state);
-        // Block_Type getBlockType();
+        int getBlockType();
+        void setNeighbors(int value, bool status);
         // void setBlockType();
     private:
         int id;
         int state;
+        bool neighbors[6];
 };

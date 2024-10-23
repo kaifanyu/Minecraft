@@ -1,8 +1,5 @@
 #include "renderer.hpp"
 
-#include "render.hpp"
-#include "shader.hpp"
-#include "texture.hpp"
 
 
 Renderer::Renderer()
@@ -17,7 +14,7 @@ void Renderer::init_renderer()
     block_texture.setTexture(ASSETS_DIR "images/cat.jpg");
 }
 
-void Renderer::set_render(std::vector<GLfloat> &vertices)
+void Renderer::set_render(std::vector<Vertex> &vertices)
 {
     block_render.setRender(vertices, 8); //8 attribute count. Should change later
 }

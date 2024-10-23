@@ -5,6 +5,7 @@
 #include <cglm/cglm.h>
 
 #include <vector>
+#include <iostream>
 #include "../world/direction.hpp"
 
 struct Vertex {
@@ -20,10 +21,12 @@ class Mesh {
 
     public:
         Mesh();
-        void update_position(float xOffset, float yOffset, float zOffset);
+        void addVertex(vec3 offset);
+        void update_position(vec3 offset, Vertex& vertexPointer);
         void printVertices() const;
+        std::vector<Vertex> getVertices() const;
         void addFace();
-        std::vector<GLfloat> getFace(Direction direction);
+        // std::vector<Vertex> getFace(Direction direction);
         static std::vector<Vertex> default_faces[6];
     private:
         std::vector<Vertex> vertices;

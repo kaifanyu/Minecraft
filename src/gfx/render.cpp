@@ -1,60 +1,63 @@
 #include "render.hpp"
 
-
 Render::Render()
 {
-    //empty constructor
+    // Empty constructor
 }
 
-Render::Render(const std::vector<GLfloat> &object, const int attribute_count)
+Render::Render(const std::vector<Vertex> &object, const int attribute_count)
 {
-    object_count = 1;
+    vertexCount = object.size();
     init(object, attribute_count);
 }
 
 Render::~Render()
 {
-    glDeleteVertexArrays(object_count, &VAO);
-    glDeleteBuffers(object_count, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
 }
 
-void Render::setRender(const std::vector<GLfloat> &object, const int attribute_count)
+void Render::setRender(const std::vector<Vertex> &object, const int attribute_count)
 {
-    object_count = 1;
+    vertexCount = object.size();
     init(object, attribute_count);
 }
 
-void Render::init(const std::vector<GLfloat>& object, const int attribute_count)
+void Render::init(const std::vector<Vertex>& object, const int attribute_count)
 {
-    glGenVertexArrays(object_count, &VAO);  //init VAO
-    glGenBuffers(object_count, &VBO);       //init VBO
+    if (object.empty()) {
+        return;  // Prevent initializing with empty vertex data
+    }
 
-    glBindVertexArray(VAO); //activate VAO
+    glGenVertexArrays(1, &VAO);  // Generate and initialize VAO
+    glGenBuffers(1, &VBO);       // Generate and initialize VBO
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO); //activate VBO
-    glBufferData(GL_ARRAY_BUFFER, object.size() * sizeof(GLfloat), object.data(), GL_STATIC_DRAW); //Bind object to VBO
+    glBindVertexArray(VAO);      // Bind VAO
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);  // Bind VBO
 
+    // Upload vertex data to GPU
+    glBufferData(GL_ARRAY_BUFFER, object.size() * sizeof(Vertex), object.data(), GL_STATIC_DRAW);
+
+    GLsizei stride = sizeof(Vertex);
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, attribute_count * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, position));
     glEnableVertexAttribArray(0);
 
-    // normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, attribute_count * sizeof(float), (void*)(3 * sizeof(float)));
+    // Normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(1);
 
-    // texture attribute 
-    // index = 2 
-    // number of components (u, v) = 2;
-    // stride = number of bytes between each set = [3 (position) + 3 (normal) + 2 (texture)] = 8
-    // offset from start of vertex data = [3 (position) + 3 (normal)] = 6
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, attribute_count * sizeof(float), (void*)(6 * sizeof(float)));
+    // Texture coordinates attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, texCoords));
     glEnableVertexAttribArray(2);
 
+    glBindVertexArray(0);  // Unbind VAO
 }
 
 void Render::draw()
 {
-    glBindVertexArray(VAO);  // Not sure if needed
-    glDrawArrays(GL_TRIANGLES, 0, 36);  // 6 faces * 2 triangles * 3 vertcies per triangle = 36
+    glBindVertexArray(VAO);  // Bind VAO
+    glDrawArrays(GL_TRIANGLES, 0, vertexCount);  // Draw the vertices
+    glBindVertexArray(0);  // Unbind VAO
 }
