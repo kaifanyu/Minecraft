@@ -13,20 +13,20 @@ void Mesh::init_default_faces()
 
     //ORDER: FRONT BACK LEFT RIGHT TOP BOTTOM
     default_faces[0] = {
-        Vertex{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
-        Vertex{{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}},
-        Vertex{{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
-        Vertex{{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
-        Vertex{{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}},
-        Vertex{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}}
+            Vertex{{-0.5f, -0.5f,  0.5f}, {0.0f,  0.0f,  1.0f}, {0.0f, 0.0f}},
+            Vertex{{0.5f, -0.5f,  0.5f},  {0.0f,  0.0f,  1.0f}, {1.0, 0.0f}},
+            Vertex{{0.5f,  0.5f,  0.5f},  {0.0f,  0.0f,  1.0f}, {1.0, 1.0}},
+            Vertex{{0.5f,  0.5f,  0.5f},  {0.0f,  0.0f,  1.0f}, {1.0, 1.0}},
+            Vertex{{-0.5f,  0.5f,  0.5f}, {0.0f,  0.0f,  1.0f}, {0.0f, 1.0}},
+            Vertex{{-0.5f, -0.5f,  0.5f}, {0.0f,  0.0f,  1.0f}, {0.0f, 0.0f}},
     };
     default_faces[1] = {
-        Vertex{{-0.5f, -0.5f,  0.5f}, {0.0f,  0.0f,  1.0f}, {0.0f, 0.0f}},
-        Vertex{{0.5f, -0.5f,  0.5f},  {0.0f,  0.0f,  1.0f}, {1.0, 0.0f}},
-        Vertex{{0.5f,  0.5f,  0.5f},  {0.0f,  0.0f,  1.0f}, {1.0, 1.0}},
-        Vertex{{0.5f,  0.5f,  0.5f},  {0.0f,  0.0f,  1.0f}, {1.0, 1.0}},
-        Vertex{{-0.5f,  0.5f,  0.5f}, {0.0f,  0.0f,  1.0f}, {0.0f, 1.0}},
-        Vertex{{-0.5f, -0.5f,  0.5f}, {0.0f,  0.0f,  1.0f}, {0.0f, 0.0f}},
+            Vertex{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
+            Vertex{{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}},
+            Vertex{{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
+            Vertex{{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
+            Vertex{{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}},
+            Vertex{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}}
     };    
     default_faces[2] = {
             Vertex{{-0.5f,  0.5f,  0.5f}, {-1.0f,  0.0f,  0.0f},   {0.0f, 0.0f}},
@@ -51,15 +51,16 @@ void Mesh::init_default_faces()
             Vertex{{0.5f,  0.5f,  0.5f},  {0.0f,  1.0f,  0.0f},   {1.0, 1.0}},
             Vertex{{-0.5f,  0.5f,  0.5f},  {0.0f,  1.0f,  0.0f},   {0.0f, 1.0}},
             Vertex{{-0.5f,  0.5f, -0.5f},  {0.0f,  1.0f,  0.0f},   {0.0f, 0.0f}},
-    };    
+    }; 
     default_faces[5] = {
-            Vertex{{-0.5f, -0.5f, -0.5f},  {0.0f,  0.0f, -1.0f},   {0.0f, 0.0f}},
-            Vertex{{0.5f, -0.5f, -0.5f},  {0.0f,  0.0f, -1.0f},   {1.0f, 0.0f}},
-            Vertex{{0.5f,  0.5f, -0.5f},  {0.0f,  0.0f, -1.0f},   {1.0f, 1.0f}},
-            Vertex{{0.5f,  0.5f, -0.5f},  {0.0f,  0.0f, -1.0f},   {1.0f, 1.0f}},
-            Vertex{{-0.5f,  0.5f, -0.5f},  {0.0f,  0.0f, -1.0f},   {0.0f, 1.0f}},
-            Vertex{{-0.5f, -0.5f, -0.5f},  {0.0f,  0.0f, -1.0f},   {0.0f, 0.0f}},
+            Vertex{{ -0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
+            Vertex{{ 0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}},
+            Vertex{{ 0.5f,  -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
+            Vertex{{ 0.5f,  -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
+            Vertex{{-0.5f,  -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}},
+            Vertex{{-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}}
     };
+
 }
 
 
@@ -70,22 +71,31 @@ std::vector<Vertex> Mesh::getVertices() const
 
 void Mesh::addVertex(vec3 offset)
 {
+    std::cout << "\nAdding offset Vertex: ";
+    glm_vec3_print(offset, stdout);
     // Iterate over the 6 faces of the cube (default_faces is an array of 6 vectors)
     for (int i = 0; i < 6; i++)
     {
-        // Iterate over the vertices in each face
-        for (size_t j = 0; j < default_faces[i].size(); j++)
+        std::vector<Vertex> temp_vertex;
+        for(const auto face_vertex : default_faces[i])
         {
-            // Update the position of each vertex with the offset
-            update_position(offset, default_faces[i][j]);
+            Vertex temp = addOffset(offset, face_vertex);
+            temp_vertex.push_back(temp);
         }
-
         // Insert the updated vertices into the main vertices vector
-        vertices.insert(vertices.end(), default_faces[i].begin(), default_faces[i].end());
+        vertices.insert(vertices.end(), temp_vertex.begin(), temp_vertex.end());
     }
 }
 
-void Mesh::update_position(vec3 offset, Vertex& vertexPointer)
+
+Vertex Mesh::addOffset(vec3 offset, Vertex vertices)
+{
+    glm_vec3_add(vertices.position, offset, vertices.position);
+    return vertices;
+}
+
+
+void Mesh::update_position(vec3 offset, Vertex vertexPointer)
 {
     // Update the vertex position by adding the offset
     glm_vec3_add(vertexPointer.position, offset, vertexPointer.position);

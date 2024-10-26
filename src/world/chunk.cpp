@@ -3,7 +3,6 @@
 Chunk::Chunk()
 {
     chunk_vertices = {};
-    printf("Created Chunk\n");
 }
 
 
@@ -19,10 +18,10 @@ void Chunk::initChunk(Camera &camera, int x_offset, int z_offset)
             {
                 // Calculate the actual world position of each block in the chunk
                 glm_vec3_copy(vec3{(float)x + (float)x_offset, (float)y, (float)z + (float)z_offset}, offset);
-
+                std::cout << "Generating block at: "; 
+                glm_vec3_print(offset, stdout);
                 // Pass the offset to addVertex
                 block_mesh.addVertex(offset);
-
                 // Add block to blocks array
                 Block newBlock(Block_Type::AIR, Block_State::Opaque);
                 blocks[x][y][z] = newBlock;

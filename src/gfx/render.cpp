@@ -52,7 +52,6 @@ void Render::init(const std::vector<Vertex>& object, const int attribute_count)
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, texCoords));
     glEnableVertexAttribArray(2);
 
-    glBindVertexArray(0);  // Unbind VAO
 }
 
 void Render::draw()
