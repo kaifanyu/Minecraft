@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include "../world/direction.hpp"
+#include "../world/block.hpp"
 
 struct Vertex {
     vec3 position;
@@ -24,6 +25,9 @@ class Mesh {
         void addVertex(vec3 offset);
         void update_position(vec3 offset, Vertex vertexPointer);
         void printVertices() const;
+
+        void addFace(vec3 offset, int blocktype, int direction);
+
         std::vector<Vertex> getVertices() const;
         Vertex addOffset(vec3 offset, Vertex vertices);
         // std::vector<Vertex> getFace(Direction direction);

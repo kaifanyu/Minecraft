@@ -1,79 +1,114 @@
 #include "world.hpp"
 
+
+
 //Initialize the camera
 World::World(): camera()
 {
-    renderDistance = 1;
+    renderDistance = 6;
+    chunk_size = 4;
     final_VAO = {};
+    update = true;
     //create the renderer
     std::cout << "Created world with inital render distance: " << renderDistance << endl;
 }
 
 
-/*
-init_world will create a starting chunk around the player in a 5x5 area. 
-1) Randomly selects a biome
-2) Based on biome, generate chunks verticies around the player
-
-Each world will have a vector of chunks vertices. These chunks will be spaced out and represent the 'center' of the chunks.
-Init_world will create a default 3x3 grid surrounding the player 
-
-
-Each chunk will have its verticies after calculating for the faces to render. It will store every face that needs to be rendered as well 
-as a 3d array of each block type.
-For example:
-
-verticies = [(-1, -1, 3)]
-blocks[0][0][0] = Air
-*/
-void World::init_world()
-{
-    block_renderer.init_renderer(); //initalize the renderer
+void World::init_world() {
+    block_renderer.init_renderer(); // Initialize the renderer
 
     Biome_type biome_type = DESERT;
-    //Rules for desert biomes. For example, generating sand
-    //Create a chunk covered with 'sand' blocks
 
-    for(int x = -renderDistance; x <= renderDistance; x++)
-    {
-        for(int z = -renderDistance; z <= renderDistance; z++)
-        {
-            printf("Generating chunk for biome Desert. X: %d Z: %d\n", x, z);
-            //load chunk with offset
-            generateChunk(biome_type, x*3, z*3);
+    // Adjust the loops to generate chunks at positions -6, -2, and 2
+    for (int x = -renderDistance; x <= renderDistance - chunk_size; x += chunk_size) {
+        for (int z = -renderDistance; z <= renderDistance - chunk_size; z += chunk_size) {
+            int x_offset = x;
+            int z_offset = z;
+
+            printf("Generating chunk for biome Desert. X: %d Z: %d\n", x_offset, z_offset);
+
+            // Generate chunk at calculated offsets
+            generateChunk(biome_type, x_offset, z_offset);
         }
     }
+
+    render_world();
+    update = false;
 }
+
 
 
 
 void World::render_world()
 {
-    for(auto& chunk: world_chunks)
+    //check if an updated needed to be made?
+    if(update)
     {
-        render_chunk(chunk);
+        for(auto& chunk: world_chunks)
+        {
+            render_chunk(chunk);
+        }
+
+        block_renderer.set_render(final_VAO);
+        block_renderer.render(camera);
+
+        //render in the axis
+    }
+    else
+    {
+        block_renderer.render(camera);
     }
 
-    block_renderer.set_render(final_VAO);
-    block_renderer.render(camera);
-
-    //render in the axis
     render_axis();
+
 }
 
-void World::render_axis()
+
+
+void World::render_chunk(Chunk &chunk)
 {
+    vector<Vertex> temp;
+    for(auto& chunk : world_chunks)
+    {
+        temp = chunk.getVertices();
+        final_VAO.insert(final_VAO.end(),temp.begin(), temp.end());
+    }
+}
+
+
+void World::generateChunk(Biome_type Biome_type, int x_pos, int z_pos)
+{
+    std::cout << "Generating Chunk at: x:" << x_pos << " z: " << z_pos << endl;
+    Chunk newChunk;
+    newChunk.initChunk(camera, x_pos, z_pos);
+    newChunk.x_offset = x_pos;
+    newChunk.z_offset = z_pos;
+    world_chunks.push_back(newChunk);
+}
+
+
+Camera& World::getCamera()
+{
+    return camera;
+}
+
+
+
+
+
+
+void World::render_axis(){
     float axis[] = {
-        -10.0f, 0.0f, 0.0f,  // Origin
-        10.0f, 0.0f, 0.0f,  // Along X-axis
+        -100.0f, 0.0f, 0.0f,  // Origin
+        100.0f, 0.0f, 0.0f,  // Along X-axis
 
         // Y-axis (green)
-        0.0f, -10.0f, 0.0f,  // Origin
-        0.0f, 10.0f, 0.0f,  // Along Y-axis
+        0.0f, -100.0f, 0.0f,  // Origin
+        0.0f, 100.0f, 0.0f,  // Along Y-axis
 
         // Z-axis (blue)
-        0.0f, 0.0f, -10.0f,  // Origin
-        0.0f, 0.0f, 10.0f   // Along Z-axis
+        0.0f, 0.0f, -100.0f,  // Origin
+        0.0f, 0.0f, 100.0f   // Along Z-axis
     };
 
     Shader axisShader;
@@ -123,32 +158,4 @@ void World::render_axis()
 
     // Unbind VAO
     glBindVertexArray(0);
-}
-
-void World::render_chunk(Chunk &chunk)
-{
-    vector<Vertex> temp;
-    for(auto& chunk : world_chunks)
-    {
-        temp = chunk.getVertices();
-
-        final_VAO.insert(final_VAO.end(),temp.begin(), temp.end());
-    }
-
-
-}
-
-
-void World::generateChunk(Biome_type Biome_type, int x_pos, int z_pos)
-{
-    std::cout << "Generating Chunk at: x:" << x_pos << " z: " << z_pos << endl;
-    Chunk newChunk;
-    newChunk.initChunk(camera, x_pos, z_pos);
-    world_chunks.push_back(newChunk);
-}
-
-
-Camera& World::getCamera()
-{
-    return camera;
 }

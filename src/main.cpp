@@ -19,12 +19,7 @@ int main() {
         return -1;  // If window initialization failed, exit
 
     world.init_world(); //init the world
-    // Enable face culling
-    glEnable(GL_CULL_FACE);
-    // Specify which faces to cull (GL_BACK culls the back faces)
-    glCullFace(GL_BACK);
-    // Set the winding order (default is GL_CCW, counter-clockwise)
-
+    
     // Render loop
     while (!glfwWindowShouldClose(window.window)) {
         //get current Time

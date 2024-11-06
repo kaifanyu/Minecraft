@@ -19,12 +19,13 @@ enum Block_State{
 class Block{
     public:
         Block();
-        Block(Block_Type type, Block_State state);
+        // Block(Block_Type type, Block_State state);
+        Block(int type, int state);
         int getBlockType();
+        bool isTransparent();
         void setNeighbors(int value, bool status);
         // void setBlockType();
     private:
-        int id;
+        int type;
         int state;
-        bool neighbors[6];
 };

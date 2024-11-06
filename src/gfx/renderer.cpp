@@ -29,7 +29,7 @@ void Renderer::render(Camera& camera)    //render loop
     block_shader.use();
     block_texture.bind(block_shader.getID());
     camera.get_view_matrix(M_view);
-    glm_perspective(glm_rad(camera.fov), (float)800.0/(float)600.f, 0.1f, 80.0f, M_projection);
+    glm_perspective(glm_rad(camera.fov), (float)600.0/(float)800.0f, 0.1f, 80.0f, M_projection);
     
     block_shader.setMat4("view", M_view);
     block_shader.setMat4("projection", M_projection);

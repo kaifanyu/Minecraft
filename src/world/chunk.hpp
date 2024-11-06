@@ -9,11 +9,18 @@
 
 #include <unordered_map>
 
-struct Chunk_Vertex {
-    int x_pos;
-    int y_pos;
-    int z_pos;
+struct block_Vertex {
+    float x_pos;
+    float y_pos;
+    float z_pos;
 };
+
+
+struct BlockManager {
+    Block block;
+    block_Vertex block_vertices;
+};
+
 
 class Chunk
 {
@@ -21,16 +28,19 @@ class Chunk
         Chunk();
         void initChunk(Camera &camera, int x_offset, int z_offset); 
         void renderChunk();    
+        void check();
+        bool isAir(int x, int y, int z);
         std::vector<Vertex> getVertices() const;    
         void print();
-        static const int CHUNK_SIZE_X = 3;
-        static const int CHUNK_SIZE_Y = 3;
-        static const int CHUNK_SIZE_Z = 3;
+        static const int CHUNK_SIZE_X = 4;
+        static const int CHUNK_SIZE_Y = 4;
+        static const int CHUNK_SIZE_Z = 4;
+
+        int x_offset;
+        int z_offset;
     private:
 
-        std::vector<Chunk_Vertex> chunk_vertices;
         Mesh block_mesh; 
 
-        //Matrix of block
-        Block blocks[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z]; //x y z size
+        std::vector<BlockManager> manager;
 };

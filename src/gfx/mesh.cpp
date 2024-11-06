@@ -69,10 +69,23 @@ std::vector<Vertex> Mesh::getVertices() const
     return vertices;
 }
 
+void Mesh::addFace(vec3 offset, int block_type, int direction)
+{
+    std::vector<Vertex> temp_vertex = default_faces[direction];
+
+    for(auto& t : temp_vertex)
+    {
+        glm_vec3_add(offset, t.position, t.position);
+        //change texture
+    }
+    vertices.insert(vertices.end(), temp_vertex.begin(), temp_vertex.end());
+}
+
+//change texture
 void Mesh::addVertex(vec3 offset)
 {
-    std::cout << "\nAdding offset Vertex: ";
-    glm_vec3_print(offset, stdout);
+    // std::cout << "\nAdding offset Vertex: ";
+    // glm_vec3_print(offset, stdout);
     // Iterate over the 6 faces of the cube (default_faces is an array of 6 vectors)
     for (int i = 0; i < 6; i++)
     {
@@ -100,28 +113,6 @@ void Mesh::update_position(vec3 offset, Vertex vertexPointer)
     // Update the vertex position by adding the offset
     glm_vec3_add(vertexPointer.position, offset, vertexPointer.position);
 }
-
-
-// std::vector<GLfloat> Mesh::getFace(Direction direction)
-// {
-//     std::vector<Vertex> faceVertices = default_faces[static_cast<int>(direction)];
-//     std::vector<GLfloat> floatVector(faceVertices.size() * 8);  // Pre-allocate exact size
-
-//     GLfloat* dataPtr = floatVector.data();  // Get a raw pointer to the underlying data
-
-//     for (const auto& vertex : faceVertices)
-//     {
-//         // Use memcpy to copy vec3 and vec2 data
-//         std::memcpy(dataPtr, vertex.position, 3 * sizeof(GLfloat));
-//         dataPtr += 3;
-//         std::memcpy(dataPtr, vertex.normal, 3 * sizeof(GLfloat));
-//         dataPtr += 3;
-//         std::memcpy(dataPtr, vertex.texCoords, 2 * sizeof(GLfloat));
-//         dataPtr += 2;
-//     }
-
-//     return floatVector;
-// }
 
 
 

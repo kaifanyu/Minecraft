@@ -5,6 +5,7 @@
 #include "../gfx/mesh.hpp"
 
 #include <unordered_map>
+#include <algorithm>
 #include <tuple>
 
 /*
@@ -26,7 +27,9 @@ class World{
         World();  
         void init_world();
         void render_world();
+        void update_chunk();
         void render_chunk(Chunk &chunk);
+        // void draw_chunk(Chunk &chunk);
         void render_axis();
         Camera& getCamera();
 
@@ -38,7 +41,9 @@ class World{
 
         std::vector<Chunk> world_chunks;
         std::vector<Vertex> final_VAO;
-        std::unordered_map<Direction, std::vector<GLfloat>> block_map;
+        // std::unordered_map<Direction, std::vector<GLfloat>> block_map;
 
         int renderDistance;
+        int chunk_size;
+        bool update;
 };
