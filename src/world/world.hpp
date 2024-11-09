@@ -33,6 +33,7 @@ class World{
         void render_axis();
         Camera& getCamera();
 
+        std::map<std::tuple<int, int>, Chunk> chunkMap;
         void generateChunk(Biome_type Biome_type, int x_pos, int z_pos);
     private:
         Camera camera;  //Player Camera

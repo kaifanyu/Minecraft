@@ -16,8 +16,6 @@ struct Vertex {
 };
 
 
-
-
 class Mesh {
 
     public:

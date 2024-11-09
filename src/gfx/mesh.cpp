@@ -72,11 +72,19 @@ std::vector<Vertex> Mesh::getVertices() const
 void Mesh::addFace(vec3 offset, int block_type, int direction)
 {
     std::vector<Vertex> temp_vertex = default_faces[direction];
-
+    float val = (float)block_type * (16.0f / 256.0f);
+    vec2 top = {(16.0f / 256.0f), 0};
     for(auto& t : temp_vertex)
     {
         glm_vec3_add(offset, t.position, t.position);
         //change texture
+        glm_vec2_scale(t.texCoords, val, t.texCoords);
+
+        if(direction == 4)
+        {
+            //get the 2nd image
+            glm_vec2_add(t.texCoords, top, t.texCoords);
+        }
     }
     vertices.insert(vertices.end(), temp_vertex.begin(), temp_vertex.end());
 }

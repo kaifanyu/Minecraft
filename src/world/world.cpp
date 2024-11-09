@@ -5,7 +5,7 @@
 //Initialize the camera
 World::World(): camera()
 {
-    renderDistance = 6;
+    renderDistance = 10;
     chunk_size = 4;
     final_VAO = {};
     update = true;

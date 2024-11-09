@@ -11,7 +11,7 @@ Renderer::Renderer()
 void Renderer::init_renderer()
 {
     block_shader.setShader(ASSETS_DIR "shaders/cube.vs", ASSETS_DIR "shaders/cube.fs");
-    block_texture.setTexture(ASSETS_DIR "images/cat.jpg");
+    block_texture.setTexture(ASSETS_DIR "images/block.png");
 }
 
 void Renderer::set_render(std::vector<Vertex> &vertices)

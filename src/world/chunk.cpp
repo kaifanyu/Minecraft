@@ -1,31 +1,55 @@
 #include "chunk.hpp"
 
+#define STB_PERLIN_IMPLEMENTATION
+#include "stb_perlin.h"
+
+
 Chunk::Chunk()
 {
     x_offset = 0;
     z_offset = 0;
+
+    frequency = 0.1f;
+    amplitude = CHUNK_SIZE_Y;
+
+    
 }
 
 
 void Chunk::initChunk(Camera &camera, int world_x_offset, int world_z_offset) {
     x_offset = world_x_offset;
     z_offset = world_z_offset;
+
     std::cout << "xoffset: " << world_x_offset;
     std::cout << " zoffset: " << world_z_offset << std::endl;
 
-    vec3 offset; // Temporary vec3 to store the world offset
+    // Initialize the 3D block array
+    blocks.resize(CHUNK_SIZE_X);
     for (int x = 0; x < CHUNK_SIZE_X; x++) {
-        for (int y = -CHUNK_SIZE_Y; y < 0; y++) {
-            for (int z = 0; z < CHUNK_SIZE_Z; z++) {
-                Block newBlock(1, 0);
+        blocks[x].resize(CHUNK_SIZE_Y);
+        for (int y = 0; y < CHUNK_SIZE_Y; y++) {
+            blocks[x][y].resize(CHUNK_SIZE_Z);
+        }
+    }
 
-                // Calculate the actual world position of each block in the chunk
-                glm_vec3_copy(vec3{(float)x + x_offset, (float)y, (float)z + z_offset}, offset);
+    for (int x = 0; x < CHUNK_SIZE_X; x++) {
+        for (int z = 0; z < CHUNK_SIZE_Z; z++) {
+            float blockx = (float)x + x_offset;
+            float blockz = (float)z + z_offset;
 
-                BlockManager temp;
-                temp.block = newBlock;
-                temp.block_vertices = {offset[0], offset[1], offset[2]};
-                manager.push_back(temp);
+            float noiseValue = stb_perlin_noise3(blockx * frequency, 0.0f, blockz * frequency, 0, 0, 0) * amplitude;
+
+            int height = (int)(noiseValue + (float)CHUNK_SIZE_Y / 2); // Adjust height to fit in the array
+            height = (int)glm_clamp((float)height, 0.0f, (float)(CHUNK_SIZE_Y - 1));
+
+            for (int y = 0; y <= height; y++) {
+                Block newBlock(1, 0); // Solid block
+                blocks[x][y][z] = newBlock;
+            }
+            // Fill the rest with air blocks
+            for (int y = height + 1; y < CHUNK_SIZE_Y; y++) {
+                Block airBlock(0, 0); // Air block
+                blocks[x][y][z] = airBlock;
             }
         }
     }
@@ -34,33 +58,39 @@ void Chunk::initChunk(Camera &camera, int world_x_offset, int world_z_offset) {
 }
 
 void Chunk::check() {
-    for (auto t : manager) {
-        float x = t.block_vertices.x_pos;
-        float y = t.block_vertices.y_pos;
-        float z = t.block_vertices.z_pos;
+    for (int x = 0; x < CHUNK_SIZE_X; x++) {
+        for (int y = 0; y < CHUNK_SIZE_Y; y++) {
+            for (int z = 0; z < CHUNK_SIZE_Z; z++) {
+                Block currentBlock = blocks[x][y][z];
+                if (currentBlock.getBlockType() == 0) continue; // Skip air blocks
 
-        vec3 offset = {x, y, z};
+                vec3 offset = {(float)x + x_offset, (float)y, (float)z + z_offset};
 
-        // Check for visible faces on chunk boundaries:
-        if (z == z_offset + CHUNK_SIZE_Z - 1) {
-            block_mesh.addFace(offset, 1, 0); // front
-        }
-        if (z == z_offset) {
-            block_mesh.addFace(offset, 1, 1); // back
-        }
-
-        if (x == x_offset + CHUNK_SIZE_X - 1) {
-            block_mesh.addFace(offset, 1, 3); // right
-        }
-        if (x == x_offset) {
-            block_mesh.addFace(offset, 1, 2); // left
-        }
-        
-        if (y == -CHUNK_SIZE_Y) {
-            block_mesh.addFace(offset, 1, 5); // bottom
-        }
-        if (y == -1) {
-            // block_mesh.addFace(offset, 1, 4); // top
+                // Left face (-X)
+                if (x == 0 || blocks[x - 1][y][z].getBlockType() == 0) {
+                    block_mesh.addFace(offset, currentBlock.getBlockType(), 2); // Left face
+                }
+                // Right face (+X)
+                if (x == CHUNK_SIZE_X - 1 || blocks[x + 1][y][z].getBlockType() == 0) {
+                    block_mesh.addFace(offset, currentBlock.getBlockType(), 3); // Right face
+                }
+                // Bottom face (-Y)
+                if (y == 0 || blocks[x][y - 1][z].getBlockType() == 0) {
+                    block_mesh.addFace(offset, currentBlock.getBlockType(), 5); // Bottom face
+                }
+                // Top face (+Y)
+                if (y == CHUNK_SIZE_Y - 1 || blocks[x][y + 1][z].getBlockType() == 0) {
+                    block_mesh.addFace(offset, currentBlock.getBlockType(), 4); // Top face
+                }
+                // Back face (-Z)
+                if (z == 0 || blocks[x][y][z - 1].getBlockType() == 0) {
+                    block_mesh.addFace(offset, currentBlock.getBlockType(), 1); // Back face
+                }
+                // Front face (+Z)
+                if (z == CHUNK_SIZE_Z - 1 || blocks[x][y][z + 1].getBlockType() == 0) {
+                    block_mesh.addFace(offset, currentBlock.getBlockType(), 0); // Front face
+                }
+            }
         }
     }
 }
@@ -70,21 +100,6 @@ void Chunk::check() {
 bool Chunk::isAir(int x, int y, int z) {
     return false;
 }
-
-/*
-world generates 9 chunks
-each chunk generates 3x3x3 blocks
-each block has 1.type 2.transparency
-
-
-I want to only render blocks where the face is visible, and that means where the face is 
-
-
-
-
-*/
-
-
 
 
 
